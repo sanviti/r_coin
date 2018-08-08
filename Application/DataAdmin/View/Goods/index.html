@@ -1,0 +1,648 @@
+<include file="Public/header"/>
+<body>
+<style>
+.col-md-7{
+	width:61%;
+}
+.col-md-5{
+	width:39%;
+}
+.col-md-7 .form-group{
+	padding-right:5px !important;
+}
+.tablebox{ width:1200px; }
+.tablebox table{ border:1px solid #ccc; width: 100%; border-bottom:none; border-right:none;}
+.tablebox table tr{ width: 100%; }
+.tablebox table td{ border-bottom:1px solid #ccc; height: 60px; line-height:60px; text-align: center; border-right:1px solid #ccc; }
+.tablebox table td span{ font-size: 14px; color: #000;}
+.form_box{float: left;
+    padding-right: 15px;display: block;
+    width: 118px; cursor: pointer;
+    height: 34px; position: relative;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    margin-right:10px;
+}
+.form_box span{ display: block; text-align: center; }
+.form_box .form_boxcheck{ display: none; position: absolute; z-index: 10; border:1px solid #ccc; left: 0; width: 335px; 
+background: #fff;flex-wrap: wrap; top: 33px; padding-top: 10px; padding-left: 15px;}
+.form_box .form_boxcheck li{ display: flex; margin-right: 15px; width:90px; margin-bottom: 10px; }
+</style>
+<include file="Public/nav"/>
+<div class="down-main">
+  <include file="Public/left"/>
+  <div class="right-product right-full">
+          <!---rightcontent---->
+            <div class="container-fluid">
+              <div class="info-center">
+                <!-- header -->
+                <div class="page-header">
+	              	<div class="pull-left">
+	                	<h4>商品管理</h4>      
+	            	</div>
+	            </div>
+                <div class="clearfix"></div>
+                <div class="content-list">    
+                	<!--搜索开始-->
+                	<form name="search" action="{:U('index')}"  method="get">
+					<div class="search-box row">
+						<div class="col-md-9">
+							<div class="form-group">
+								<span class="pull-left form-span">商品名</span>
+								<input type="text" name="name" value="{:I('name')}" class="form-control" placeholder="">
+							</div>
+							<div class="form-group">
+								<select name="state" class="form-control">
+								<option value="" <if condition="$Think.request.state heq ''"> selected="selected"</if>>请选择商品状态</option>
+								<option value="0" <if condition="$Think.request.state heq '0'"> selected="selected"</if>>下架</option>
+								<option value="1" <if condition="$Think.request.state heq '1'"> selected="selected"</if>>上架</option>
+								</select>
+							</div>
+						
+							<div class="form-group">
+								<select name="cid" class="form-control">
+									<option value="" >分类</option>
+									<foreach name="catInfo" item="vo" key="k">
+										<option value="{$k}" <if condition="$Think.request.cid eq $k"> selected="selected"</if>>{$vo.name}</option>
+									</foreach>
+								</select>
+							</div>
+							<div class="form-group">
+								<button class="form-control btn btn-default" id="searchBtn" type="submit"><span class="glyphicon glyphicon-search"></span> 搜索</button>  
+							</div>
+						</div> 
+						            
+                    </div>
+                    </form>
+					<!--搜索结束-->
+					<div class="clearfix"></div>
+					<!--内容开始-->
+					<form id="listForm" method="post">
+					<div class="table-margin">
+						<table class="table table-bordered table-header table-hover">
+							<thead>
+								<tr>
+									<th class="w5 text-center"><input type="checkbox" class="selectAll" /></th>
+									<th class="w5">商品ID</th>
+									<th class="w10">商品名称</th>									
+									<th class="w5">图片</th>
+									<th class="w10">库存</th>
+									<th class="w10">价格</th>
+									<th class="w10">添加时间</th>
+									<th class="w10">状态</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							
+						<notempty name="list">
+							<tbody>
+								<volist name="list" id="vo" key="val">
+									<tr class="long-td">
+										<td class="text-center"><input type="checkbox" name="ids[]" value="{$vo.goods_id}" class="selectAll-item"/></td>
+										<td>{$vo.goods_id}</td>
+										<td>{$vo.goods_name}</td>	
+										<td>
+											<img src="__ROOT__{$vo.goods_img|default="/Public/DataAdmin/images/imgico1.png"}"  width="100%"/>
+										</td>
+										<td>{$vo.goods_stock}</td>
+										<td>
+											{$vo.price}元
+										</td>	
+										<td>{$vo.dateline|date='Y-m-d H:i:s',###}</td>
+										<td>
+										<if condition="$vo.status eq '0'">
+											下架
+										<else/>
+											上架
+										</if>
+										</td>
+										<td>
+											<a href="{:U('edit',array('goods_id'=>$vo['goods_id']))}">编辑</a>
+											<span class="text-explode">|</span>
+											<a href="javascript:;" data-id="{$vo.goods_id}" class="del">删除</a>	
+										</td>
+									</tr>
+								</volist>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td colspan="10">
+											<div class="pull-right">
+												<nav class="pagination">{$page}</nav>
+											</div>
+										</td>
+									</tr>
+								</tfoot>
+						<else/>
+
+								<tr>
+									<td colspan="10" class="text-center">
+										没有数据拉！
+									</td>
+								</tr>
+						</notempty>
+							
+						</table>
+                    </div>
+					</form>
+					<!--内容结束-->
+                </div>
+                
+              </div>
+            </div>
+  </div>
+</div>
+</body>
+<script type="text/javascript">
+	$(function(){
+		$(document).on("click" ,'.del',function(){
+			var tt = $(this);
+            var id = $(this).data('id');
+            layer.confirm('确定删除？', {
+				  btn: ['确定','取消'] //按钮
+				}, function(){
+					$.ajax({
+						url:"{:U('delGoods')}",
+						data:{
+							"id"     :id
+						},
+						type:"post",
+						dataType:"json",
+						success:function(data){
+							layer.closeAll();
+								if (data.code=='S')
+								{
+									tt.parents('tr').remove();
+									layer.msg('删除成功');
+									
+								}else{
+									layer.msg('删除失败');
+								}
+								
+									
+							}
+						});
+				}
+			);
+        });
+        //商品标签点击事件
+        function stopPropagation(e) {
+            var ev = e || window.event;
+            if (ev.stopPropagation) {
+                ev.stopPropagation();
+            }
+            else if (window.event) {
+                window.event.cancelBubble = true;//兼容IE
+            }
+        }
+        $('.form_box').click(function(e){
+        	$('.form_boxcheck').css({'display':'flex'});
+        	stopPropagation(e);
+        })
+        $(document).bind('click', function () {
+            $(".form_boxcheck").hide();
+        });
+        $(".form_boxcheck").click(function (e) {
+            stopPropagation(e);
+        });
+        //end
+
+		$('.batchchage').click(function(){
+			var type = $(this).attr('data-value');
+			var chk_value =[];
+			$('input[name="ids[]"]:checked').each(function(){
+				chk_value.push($(this).val());
+			});
+			if (chk_value=='')
+			{
+				layer.msg('请选择操作数据');
+				return false;
+			}
+			
+			$.ajax({
+				url:"{:U('setGoodsStatus')}",
+				data:{
+					"idStr"     :chk_value,
+					"type"      :type
+				},
+				type:"post",
+				dataType:"json",
+				success:function(data){
+					layer.msg('操作成功');
+					setTimeout("location.reload();",1000);
+								
+									
+				}
+			});
+		})
+		$('.hotchage').click(function(){
+			var type = $(this).attr('data-value');
+			var chk_value =[];
+			$('input[name="ids[]"]:checked').each(function(){
+				chk_value.push($(this).val());
+			}); 
+			if (chk_value=='')
+			{
+				layer.msg('请选择操作数据');
+				return false;
+			}
+			
+			$.ajax({
+				url:"{:U('setGoodsHot')}",
+				data:{
+					"idStr"     :chk_value,
+					"type"      :type
+				},
+				type:"post",
+				dataType:"json",
+				success:function(data){
+					layer.msg('操作成功');
+					setTimeout("location.reload();",1000);					
+				}
+			});
+		})
+		$('.recommendchage').click(function(){
+			var type = $(this).attr('data-value');
+			var chk_value =[];
+			$('input[name="ids[]"]:checked').each(function(){
+				chk_value.push($(this).val());
+			}); 
+			if (chk_value=='')
+			{
+				layer.msg('请选择操作数据');
+				return false;
+			}
+			
+			$.ajax({
+				url:"{:U('setGoodsRecommed')}",
+				data:{
+					"idStr"     :chk_value,
+					"type"      :type
+				},
+				type:"post",
+				dataType:"json",
+				success:function(data){
+					layer.msg('操作成功');
+					setTimeout("location.reload();",1000);
+								
+									
+				}
+			});
+		})
+		
+		//设置80%激励
+		$('.eight').click(function(){
+			var type = $(this).attr('data-value');
+			var chk_value =[];
+			$('input[name="ids[]"]:checked').each(function(){
+				chk_value.push($(this).val());
+			}); 
+			if (chk_value=='')
+			{
+				layer.msg('请选择操作数据');
+				return false;
+			}
+			
+			$.ajax({
+				url:"{:U('setEight')}",
+				data:{
+					"idStr"     :chk_value,
+					"type"      :type
+				},
+				type:"post",
+				dataType:"json",
+				success:function(data){
+					layer.msg('操作成功');
+					setTimeout("location.reload();",1000);
+								
+									
+				}
+			});
+		})
+		
+		//设置满减
+		$('.manjian').click(function(){
+			var type = $(this).attr('data-value');
+			var chk_value =[];
+			$('input[name="ids[]"]:checked').each(function(){
+				chk_value.push($(this).val());
+			}); 
+			if (chk_value=='')
+			{
+				layer.msg('请选择操作数据');
+				return false;
+			}
+			
+			$.ajax({
+				url:"{:U('setManjian')}",
+				data:{
+					"idStr"     :chk_value,
+					"type"      :type
+				},
+				type:"post",
+				dataType:"json",
+				success:function(data){
+					layer.msg('操作成功');
+					setTimeout("location.reload();",1000);
+								
+									
+				}
+			});
+		})
+		//设置买赠
+		$('.maizeng').click(function(){
+			var type = $(this).attr('data-value');
+			var chk_value =[];
+			$('input[name="ids[]"]:checked').each(function(){
+				chk_value.push($(this).val());
+			}); 
+			if (chk_value=='')
+			{
+				layer.msg('请选择操作数据');
+				return false;
+			}
+			
+			$.ajax({
+				url:"{:U('setMaizeng')}",
+				data:{
+					"idStr"     :chk_value,
+					"type"      :type
+				},
+				type:"post",
+				dataType:"json",
+				success:function(data){
+					layer.msg('操作成功');
+					setTimeout("location.reload();",1000);
+								
+									
+				}
+			});
+		})
+		
+		//设置品牌
+		$('.spinpai').click(function(){
+			var type = $(this).attr('data-value');
+			var chk_value =[];
+			$('input[name="ids[]"]:checked').each(function(){
+				chk_value.push($(this).val());
+			}); 
+			if (chk_value=='')
+			{
+				layer.msg('请选择操作数据');
+				return false;
+			}
+			
+			$.ajax({
+				url:"{:U('setPinpai')}",
+				data:{
+					"idStr"     :chk_value,
+					"is_pinpai"      :type
+				},
+				type:"post",
+				dataType:"json",
+				success:function(data){
+					layer.msg('操作成功');
+					setTimeout("location.reload();",1000);
+								
+									
+				}
+			});
+		})
+		//取消设置品牌
+		$('.xpinpai').click(function(){
+			var type = $(this).attr('data-value');
+			var chk_value =[];
+			$('input[name="ids[]"]:checked').each(function(){
+				chk_value.push($(this).val());
+			}); 
+			if (chk_value=='')
+			{
+				layer.msg('请选择操作数据');
+				return false;
+			}
+			
+			$.ajax({
+				url:"{:U('unsetPinpai')}",
+				data:{
+					"idStr"     :chk_value,
+					"is_pinpai"      :type
+				},
+				type:"post",
+				dataType:"json",
+				success:function(data){
+					layer.msg('操作成功');
+					setTimeout("location.reload();",1000);
+								
+									
+				}
+			});
+		})
+		//设置折扣
+		$('.zhekou').click(function(){
+			var type = $(this).attr('data-value');
+			var chk_value =[];
+			$('input[name="ids[]"]:checked').each(function(){
+				chk_value.push($(this).val());
+			}); 
+			if (chk_value=='')
+			{
+				layer.msg('请选择操作数据');
+				return false;
+			}
+			
+			$.ajax({
+				url:"{:U('setZhekou')}",
+				data:{
+					"idStr"     :chk_value,
+					"type"      :type
+				},
+				type:"post",
+				dataType:"json",
+				success:function(data){
+					layer.msg('操作成功');
+					setTimeout("location.reload();",1000);
+								
+									
+				}
+			});
+		})
+		//设置好物
+		$('.shaowu').click(function(){
+			var type = $(this).attr('data-value');
+			var chk_value =[];
+			$('input[name="ids[]"]:checked').each(function(){
+				chk_value.push($(this).val());
+			}); 
+			if (chk_value=='')
+			{
+				layer.msg('请选择操作数据');
+				return false;
+			}
+			
+			$.ajax({
+				url:"{:U('setFound')}",
+				data:{
+					"idStr"     :chk_value,
+					"is_haowu"      :type
+				},
+				type:"post",
+				dataType:"json",
+				success:function(data){
+					layer.msg('操作成功');
+					setTimeout("location.reload();",1000);
+								
+									
+				}
+			});
+		})
+		//取消设置品牌
+		$('.xhaowu').click(function(){
+			var type = $(this).attr('data-value');
+			var chk_value =[];
+			$('input[name="ids[]"]:checked').each(function(){
+				chk_value.push($(this).val());
+			}); 
+			if (chk_value=='')
+			{
+				layer.msg('请选择操作数据');
+				return false;
+			}
+			
+			$.ajax({
+				url:"{:U('unsetFound')}",
+				data:{
+					"idStr"     :chk_value,
+					"is_haowu"      :type
+				},
+				type:"post",
+				dataType:"json",
+				success:function(data){
+					layer.msg('操作成功');
+					setTimeout("location.reload();",1000);
+								
+									
+				}
+			});
+		})
+		
+		
+		//列表审核商品
+		$(document).on("change" ,'#status',function(){
+			var status = $(this).val();
+			var id = $(this).attr('data');
+			if (id=='')
+			{
+				layer.msg('请选择操作数据');
+				return false;
+			}
+			
+			$.ajax({
+				url:"{:U('status')}",
+				data:{
+					"id" :id,
+					"status":status
+				},
+				type:"post",
+				dataType:"json",
+				success:function(data){
+					layer.closeAll();
+					if(data.returnCode == "SUCCESS"){
+						layer.msg('成功');
+						location.href="__ACTION__/";
+					}else{
+						layer.msg('失败');
+					}
+				}
+			});
+		})
+		
+		//拒绝商品
+		$(document).on("click" ,'.refuse',function(){
+			var id = $(this).attr('id');
+			var str = "<div style='height:30px; padding:10px 20px 10px 20px; color:#999; font-size:14px;'><label style='font-family:'楷体';'>拒绝理由：</label><input type='text' name='cause' id='cause' style='width:280px;'></div>";
+			str+="<div style='height:30px; padding:20px 20px 10px 160px;'><input type='button' id='rsub' value='确定' style='width:50px; color:blue;'></div>";
+			layer.open({
+				  type: 1,
+				  title:"请填写拒绝理由",
+				  skin: 'layui-layer-rim', //加上边框
+				  area: ['420px', '160px'], //宽高
+				  content: str
+				});
+			$("#rsub").click(function(){
+				var cause = $("#cause").val();
+				if(cause == null || cause == ''){
+					layer.msg("请填写拒绝理由");
+					return false;
+				}
+				$.post("{:U('set_refuse')}",{'id':id,'cause':cause},function(d){
+					if(d.returnCode=="SUCCESS"){
+						alert(d.returnMsg);
+						layer.closeAll();
+						location.href="__ACTION__/";
+					}else{
+						alert(d.returnMsg);
+					}
+				},'json');
+			});
+		})
+		
+		//取消App首页推荐
+		$(document).on("click" ,'.dels',function(){
+			var id = $(this).data('id');
+			var p = '{$p}';
+			$.post("{:U('delRecommend')}",{"goodsid":id},function(d){
+				console.log(d);
+				if(d.returnCode=="SUCCESS"){
+					layer.msg("取消成功！");
+				}else{
+					layer.msg("取消失败！");
+				}
+				location.href="__ACTION__/p/"+p;
+			},"json");
+		})
+	
+		//设置商品参考价
+		$(document).on("blur" ,'.look_price',function(){
+			var id = $(this).data('id');
+			var look = $(this).val();
+			var p = '{$p}';
+			$.post("{:U('set_lookprice')}",{"goodsid":id,"look":look},function(d){
+				console.log(d);
+				if(d.returnCode=="SUCCESS"){
+					layer.msg("设置成功！");
+				}else{
+					layer.msg("设置失败！");
+				}
+				location.href="__ACTION__/p/"+p;
+			},"json");
+		})
+
+		//设置排序
+		$(document).on("blur" ,'.csort',function(){
+			var id = $(this).data('id');
+			var num = $(this).val();
+			$.post("{:U('set_csort')}",{"goodsid":id,"num":num},function(d){
+				console.log(d);
+				if(d.returnCode=="SUCCESS"){
+					layer.msg("设置成功！");
+					location.reload();
+				}else{
+					layer.msg("设置失败！");
+					location.reload();
+				}
+			},"json");
+		})
+	})
+</script>
+<include file="Public/footer"/>

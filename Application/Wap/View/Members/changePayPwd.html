@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale-1.0,user-scalable=no"/>
+	<title></title>
+</head>
+
+<body style="background-color:#ffffff;">
+<?php
+            $agent = $_SERVER['HTTP_USER_AGENT'];
+            if(strpos($agent,"Html5Plus") === false){
+        ?>
+<include file="public/top"/>
+<?php
+           }else{
+        ?>
+<style type="text/css">.c_content{margin-top: 0}</style>
+<?php
+            }
+        ?>
+<include file="public/header"/>
+<!--头部-->
+
+<div class="clearfix" style="height: 1.9rem;"></div>
+
+<div class="c_content mt22"  id="form">
+	<div class="form_box">
+		<form action="" method="post" name="pass_form" id="pass_form">
+			<div class="list">
+				<div class="name">原交易密码：</div>
+				<input  placeholder="请输入原密码" name="opwd" type="password" id="opwd" value="" />
+			</div>
+			<div class="list">
+				<div class="name">新交易密码：</div>
+				<input  placeholder="请输入新密码" name="npwd" type="password" id="npwd" value="" />
+			</div>
+			<div class="list">
+				<div class="name">确认密码：</div>
+				<input placeholder="请输入确认密码"  name="npwd2" type="password" id="npwd2" value="" />
+			</div>
+			<div class="ht_but" id="btn_submit">确认</div>
+		</form>
+	</div>
+</div>
+<div class="c_content mt22" style="display:none;" id="auth-tip">
+	<h4 class="auth_title" style="text-align: center;"></h4>
+</div>
+<include file="public/nav"/>
+<include file="public/footer"/>
+<script language="javascript" type="text/javascript">
+$(function(){
+  	$('#btn_submit').click(function(){
+		if($('input[name="opwd"]').val() == ''){
+			alertMsg('请输入原密码！');
+			return false;
+		}
+		if($('input[name="npwd"]').val() == ''){
+			alertMsg('请填写新密码');
+			return false;
+		}
+		if($('input[name="npwd"]').val() != $('input[name="npwd2"]').val()){
+			alertMsg('新密码与确认密码不一致！');
+			return false;
+		}
+		AjaxPost('{:U("Api/Members/edipaytpwd")}','pass_form','#btn_submit',function(data){
+			if(data.returnCode == 1){
+				alertMsg(data.returnMsg, function(){
+					location.href = "{:U('Wap/Members/index')}";
+				});
+			} else {
+				alertMsg(data.returnMsg);
+			}
+		});
+	});
+});
+</script>
+	</body>
+</html>

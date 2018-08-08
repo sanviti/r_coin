@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale-1.0,user-scalable=no"/>
+		<title></title>
+		<link rel="stylesheet" href="css/public.css" />
+		<link rel="stylesheet" href="css/index.css" />
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js" ></script>
+		<script type="text/javascript" src="js/public.js" ></script>
+	</head>
+	<body class="b_eb">
+		<!--头部-->
+		<div class="header">
+			<span class="text">商城</span>
+		</div>
+		<div class="clearfix" style="height: 4.1rem;"></div>
+		
+		<div class="mall_hea_box">
+			<div class="bg"></div>
+			<div class="list_box">
+				<div class="list list_on">矿机商城</div>
+				<div class="list">消费商城</div>
+			</div>
+		</div>
+		
+		<div class="mall_con_box">
+			<div class="list">
+				<div class="img_box"><img src="images/jpg7.jpg"/></div>
+				<div class="name">超级矿机</div>
+				<div class="text">价值：100000PSC<br/>算力：10G<br/>产矿比例：30%<br/>运行周期：1440小时<br/>产量：90.278个/小时<br/>总产量：130000</div>
+				<div class="but but_on"><span>立即兑换</span></div>
+			</div>
+			<div class="list">
+				<div class="img_box"><img src="images/jpg8.jpg"/></div>
+				<div class="name">超级矿机</div>
+				<div class="text">价值：100000PSC<br/>算力：10G<br/>产矿比例：30%<br/>运行周期：1440小时<br/>产量：90.278个/小时<br/>总产量：130000</div>
+				<div class="but"><span>立即兑换</span></div>
+			</div>
+			<div class="list">
+				<div class="img_box"><img src="images/jpg9.jpg"/></div>
+				<div class="name">超级矿机</div>
+				<div class="text">价值：100000PSC<br/>算力：10G<br/>产矿比例：30%<br/>运行周期：1440小时<br/>产量：90.278个/小时<br/>总产量：130000</div>
+				<div class="but"><span>立即兑换</span></div>
+			</div>
+		</div>
+		
+		<!---交易密码-->
+		<div class="dialog_overlay" style="display: none;"></div>
+		<div class="confirmation_box confirmation_box1" style="display: none;">
+			<span class="confirmation_box_text">交易密码</span>
+			<input type="text" name="" value="" />
+			<div class="clearfix"></div>
+			<div class="confirmation_box_but">
+				<span class="confirmation_box_cancel">取消</span>
+				<span class="confirmation_box_confirm">确认</span>
+			</div>
+		</div>
+		
+		<div class="clearfix" style="height: 2.4rem;"></div>
+		<footer>
+			<a class="list">
+				<div class="img_box"><img src="images/png6.png"/></div>
+				<div class="text">首页</div>
+			</a>
+			<a class="list on">
+				<div class="img_box"><img src="images/png21.png"/></div>
+				<div class="text">商城</div>
+			</a>
+			<a class="list">
+				<div class="img_box"><img src="images/png8.png"/></div>
+				<div class="text">交易</div>
+			</a>
+			<a class="list">
+				<div class="img_box"><img src="images/png19.png"/></div>
+				<div class="text">我的</div>
+			</a>
+		</footer>
+		
+		<script>
+			$(window).load(function(){
+				$(".mall_con_box .img_box").each(function(){
+					$(this).imgSca();
+				})
+			})
+		</script>
+		
+	</body>
+</html>

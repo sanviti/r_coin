@@ -1,0 +1,424 @@
+<include file="public/header"/>
+<body class="b_eb">
+<!--头部-->
+
+<include file="public/top"/>
+<div class="clearfix" style="height: 1.9rem;"></div>
+
+<div class="trading_center_title">今日价值趋势</div>
+<div class="trading_center_data">
+	<div class="list">
+		<div class="text" id="price">-.---</div>
+		<div class="name">今开</div>
+	</div>
+	<div class="list">
+		<div class="text f_gre" id="high">-.---</div>
+		<div class="name">最高</div>
+	</div>
+	<div class="list">
+		<div class="text" id="low">-.---</div>
+		<div class="name">最低</div>
+	</div>
+	<div class="list">
+		<div class="text" id="lastprice">-.---</div>
+		<div class="name">昨收</div>
+	</div>
+</div>
+
+<div class="trading_center_line">
+	<div class="ht_con_title">RC价值曲线图</div>
+	<div class="container_box"><div id="container"></div></div>
+</div>
+
+<div class="trading_center_rc">
+	<div class="title">
+		<p class="list list_on" data-type="1">买入RC</p>
+		<p class="list" data-type="2">卖出RC</p>
+		<input name="order_type" type="hidden" id="order_type" value="1">
+	</div>
+	<form id="buyform">
+	<div class="order_center_time clearfix">
+		<input class="fl" type="text" placeholder="买入价格" name="buy_price" value="" />
+		<input class="fr" type="text" placeholder="买入数量" name="buy_num" value="" />
+		<div class="clearfix"></div>
+		<input class="fl" type="password" placeholder="支付密码" name="buy_password" value="" />
+		<span class="query" id="buybtn">确认买入</span>
+	</div>
+  </form>
+	<form id="sellform" style="display: none;">
+	<div class="order_center_time clearfix"  >
+		<input class="fl" type="text" placeholder="卖出价格" name="sell_price" value="" />
+		<input class="fr" type="text" placeholder="卖出数量" name="sell_num" value="" />
+		<div class="clearfix"></div>
+		<input class="fl" type="password" placeholder="支付密码" name="sell_password" value="" />
+		<span class="query" id="sellbtn">确认卖出</span>
+	</div>
+</form>
+	<div class="order_center_pho">
+		<input class="pho" type="text" placeholder="输入手机号搜索"  maxlength="11"  name="" value="" id="phone" />
+		<div class="translist dropload-box" >
+
+
+		</div>
+	</div>
+</div>
+
+<div class="clearfix" style="height: 2.4rem;"></div>
+<div id="paybox" style="display:none">
+	<input name="pwd" type="password" id="paypwd" style="width:100%; height: 1rem;border: 1px solid #f0f0f0;" placeholder="请输入交易密码"/>
+</div>
+<include file="public/nav"/>
+
+<script type="text/javascript" src="__ROOT__/Public/Wap/js/echarts.min.js" ></script>
+<link href="__PUBLIC__/Wap/js/dropload/dropload.css" rel="stylesheet">
+<script src="__PUBLIC__/Wap/js/dropload/dropload.min.js"></script>
+<script>
+
+	var pageStart = 1;
+	var currphone = '';
+	var dropload; //下拉加载对象
+	var loading = false;
+	$(function(){
+		pageInit();
+	})
+
+
+	//初始化
+	function pageInit(){
+		//交易数据
+		Transdata();
+		bindSerach();
+		PostBindEvent();
+		bindDropload();
+		ActionBindEvent();
+	}
+
+	//加载数据
+	function Transdata(){
+		api("{:U('Api/Deal/index')}", {}, function(data){
+			if(data.returnCode){
+				_load_callback(data);
+			}
+		});
+	}
+
+	function _load_callback(data){
+		$('input[name="sell_price"],input[name="buy_price"]').val(data.result.price);
+		$('#price').html(data.result.price);
+		$('#high').html(data.result.todayH);
+		$('#low').html(data.result.todayL);
+		$('#lastprice').html(data.result.lastPrice);
+		setCharts(data.result.price_list,data.result.date_list);
+	}
+
+
+	function setCharts(plist, dlist){
+		var myChart = echarts.init(document.getElementById('container'));
+		var option = {
+
+			grid:{
+				top:30,
+				left:30,
+				bottom:30,
+				right:20,
+				left:40,
+			},
+			xAxis: {
+				splitNumber : 5,
+				data: dlist,
+				axisTick : {
+					alignWithLabel : true,
+					interval : 1
+				},
+			},
+			yAxis: {
+
+			},
+			series: [{
+				name: '成交价',
+				type: 'line',
+				data:  plist,
+				symbolSize:3,
+			}]
+		};
+		// 使用刚指定的配置项和数据显示图表。
+		myChart.setOption(option);
+	}
+
+
+
+
+	//发布买入卖出事件绑定
+	function PostBindEvent(){
+		//切换选项卡
+		$('.title p').click(function(){
+			if($(this).hasClass('show')){
+				return false;
+			}
+
+			if($(this).data('type') == 1){
+				$('#buyform').show();
+				$('#sellform').hide();
+			}else{
+				$('#buyform').hide();
+				$('#sellform').show();
+			}
+			$('.title p').removeClass('list_on');
+			$(this).addClass('list_on');
+			$('#order_type').val($(this).attr('data-type'));
+			$('.translist').html('');
+			pageStart = 1;
+		    currphone = phone;
+			dropload.noData(false);
+			dropload.unlock ();
+			loadDownFn(dropload);
+		});
+//		买入opc
+		$('#buybtn').click(handle_buy);
+		//卖出opc
+		$('#sellbtn').click(handle_sell);
+	}
+
+	//发布买入回掉
+	function handle_buy(){
+		if($('#buybtn').attr("disabled") == 'disabled') return;
+		var price = $('input[name="buy_price"]');
+		var num = $('input[name="buy_num"]');
+		var password = $('input[name="buy_password"]');
+		if(!isDecimalRangeIn(price.val(), 0.001, 10000) ){
+			alertMsg('请输入有效单价');
+			price.focus();
+			return;
+		}
+		if(!isNumberRangeIn(num.val(), 1, 1000000)){
+			alertMsg('请输入有效数量');
+			num.focus();
+			return;
+		}
+		if(isEmpty(password.val())){
+			alertMsg('请输入交易密码');
+			password.focus();
+			return;
+		}
+
+		AjaxPost("{:U('Api/orders/submitBuy')}", 'buyform', '#buybtn', function(data){
+			if(data.returnMsg == 10000){
+				alertMsg('登陆信息失效，请重新登录', {}, function(){
+					location.href = "{:U('Wap/Login/index')}";
+				});
+			}else{
+				alertMsg(data.returnMsg,function(){
+					$('.translist').html('');
+					pageStart = 1;
+					currphone = '';
+					dropload.noData(false);
+					dropload.unlock ();
+					loadDownFn(dropload);
+				});
+
+
+			}
+		})
+	}
+
+	//发布卖出回掉
+	function handle_sell(){
+		if($('#sellbtn').attr("disabled") == 'disabled') return;
+		var price = $('input[name="sell_price"]');
+		var num = $('input[name="sell_num"]');
+		var password = $('input[name="sell_password"]');
+		if(!isDecimalRangeIn(price.val(), 0.001, 10000) ){
+			alertMsg('请输入有效单价');
+			price.focus();
+			return;
+		}
+		if(!isNumberRangeIn(num.val(), 1, 1000000)){
+			alertMsg('请输入有效数量');
+			num.focus();
+			return;
+		}
+		if(isEmpty(password.val())){
+			alertMsg('请输入交易密码');
+			password.focus();
+			return;
+		}
+
+		AjaxPost("{:U('Api/orders/submitSell')}", 'sellform', '#sellbtn', function(data){
+			if(data.returnMsg == 10000){
+				alertMsg('登陆信息失效，请重新登录', {}, function(){
+					location.href = "{:U('Wap/Login/index')}";
+				});
+			}else{
+				alertMsg(data.returnMsg,function(){
+					$('.translist').html('');
+					pageStart = 1;
+					currphone = '';
+					dropload.noData(false);
+					dropload.unlock ();
+					loadDownFn(dropload);
+				});
+
+			}
+		})
+	}
+
+	//点击买入卖出时间
+	function ActionBindEvent(){
+		$('.translist').on('click', 'a', function(){
+			var sell_url = '{:U("Api/Orders/sell")}';
+			var buy_url = '{:U("Api/Orders/buy")}';
+			var ordersn = $(this).attr('sn');
+			var url = $(this).hasClass('buy') ? sell_url : buy_url;
+			layer.open({
+				title: [
+					'交易密码',
+					'background-color:#f2f2f2; color:#000;'
+				]
+				,anim: 'up'
+				,content: $('#paybox').html()
+				,btn: ['确认', '取消']
+				,yes : function(){
+					password = $('.layui-m-layercont #paypwd');
+					if(isEmpty(password.val())){
+						$('.layui-m-layercont #tip').css('color', 'red');
+						password.focus();
+						return;
+					}
+					var params = {
+						paypwd : password.val(),
+						ordersn : ordersn,
+					}
+					PostApi(url, params, function(data){
+						if(data.returnCode == 1){
+							alertMsg(data.returnMsg, '', function(){
+								$('.translist').html('');
+								pageStart = 1;
+								currphone = '';
+								dropload.noData(false);
+								dropload.unlock ();
+								loadDownFn(dropload);
+							});
+						}else{
+							alertMsg(data.returnMsg);
+						}
+
+					})
+				}
+			});
+
+		})
+	}
+
+
+
+	//搜索
+	function bindSerach(){
+		$('#phone').keyup(function(){
+			var phone = $(this).val();
+			if(currphone == phone) return;
+			if(phone.length == 11){
+				if(isPhoneNo(phone)){
+					$('.translist').html('');
+					pageStart = 1;
+					currphone = phone;
+					dropload.noData(false);
+					dropload.unlock ();
+					loadDownFn(dropload);
+				}else{
+					alertMsg('请输入有效手机号', function(){
+					});
+					return;
+				}
+			}
+			if(phone.length == 0){
+				dropload.noData(false);
+				dropload.unlock ();
+				loadDownFn(dropload);
+			}
+		});
+	}
+
+	//下拉列表绑定
+	function bindDropload(){
+		//交易列表
+		dropload = $('.dropload-box').dropload({
+			scrollArea : window,
+			domDown : {
+				domClass   : 'dropload-down',
+				domRefresh : '<div class="dropload-refresh">↑上拉加载更多</div>',
+				domLoad    : '<div class="dropload-load"><span class="loading"></span></div>',
+				domNoData  : '<div class="dropload-noData">没有更多数据</div>'
+			},
+			loadDownFn : loadDownFn,
+		});
+	}
+
+
+
+
+	//下拉加载回调
+	function loadDownFn(me){
+		if(loading == true) return;
+		loading = true;
+		var params = {
+			page : pageStart,
+			order_type:$('#order_type').val()
+		}
+		var phone = $('#phone').val();
+		if(isPhoneNo(phone)){
+			params.phone = phone;
+		}
+
+		api("{:U('Api/Deal/orders')}", params, function(data){
+			if(data.returnCode == 1 && data.result.list.length > 0) {
+				var html = '';
+				$.each(data.result.list,function(idx,item){
+					if(item.type == 1){
+						var btn = '<a class="but buy" sn="'+ item.order_sn +'">卖出</a>';
+
+					}else{
+						var btn = '<a class="but sell" sn="'+ item.order_sn +'">买入</a>';
+					}
+					html += '<div class="list_box">'
+
+
+							+'<div class="img" style="background: url('+ item.headimg +') no-repeat center; background-size: cover;"></div>'
+							+'<div class="name">'+item.nickname+'</div>'
+							+'<div class="list_con clearfix">'
+
+							+'<div class="list">'
+							+'<div class="lab">数量</div>'
+							+'<div class="number">'+item.opc +'</div></div>'
+
+							+'<div class="list">'
+							+'<div class="lab">价值</div>'
+							+'<div class="number">'+item.price +'</div></div>'
+
+							+'<div class="list">'
+							+'<div class="lab">成交</div>'
+							+'<div class="number">'+item.chengjiao +'</div></div>'
+
+							+'</div>'
+							+ btn
+							+'</div>';
+
+				});
+				pageStart = data.result.page;
+				$('.translist').append(html);
+				me.noData(false);
+			} else {
+				// 无数据
+				me.noData();
+				// 锁定
+				me.lock();
+			}
+			loading = false;
+			me.resetload();
+		});
+	}
+
+
+</script>
+
+</body>
+</html>

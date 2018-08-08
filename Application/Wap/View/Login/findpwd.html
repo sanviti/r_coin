@@ -1,0 +1,126 @@
+<include file="public/header"/>
+<include file="public/top"/>
+<body style="background-color:#ffffff;">
+<div class="clearfix" style="height: 1.9rem;"></div>
+<div class="c_content mt22"  id="form">
+	<div class="form_box">
+		<form action="" method="post" name="forget_form" id="forget_form">
+			<div class="list">
+				<div class="name">手机：</div>
+				<input  placeholder="请输入手机号" name="mobile" type="text" id="mobile" value="" />
+			</div>
+			<div class="list">
+				<div class="name">用户名：</div>
+				<input  placeholder="请输入用户名" name="username" type="text" id="username" value="" />
+			</div>
+			<div class="list">
+				<div class="name">验证码：</div><input name="vcode" type="text" id="vcode" placeholder="请输入验证码" />
+				<botton style="display: block;position: absolute; right: .2rem; top:0.8rem; height: 0.8rem; background: #138eff; color: #fff; padding: .1rem .5rem;" id="sendcode" >点击发送</botton>
+			</div>
+			<div class="list">
+				<div class="name">新密码：</div>
+				<input  placeholder="请输入新密码" name="password" type="password" id="password" value="" />
+			</div>
+			<div class="list">
+				<div class="name">确认密码：</div>
+				<input placeholder="请输入确认密码"  name="password2" type="password" id="password2" value="" />
+			</div>
+			<div class="ht_but" id="btn_submit">确认</div>
+		</form>
+	</div>
+</div>
+
+<include file="public/footer"/>
+<div id="imgcodebox" style="display: none;">
+	<div class="imgcode"><img src="{:U('Api/Vcode/image')}" /></div>
+	<div class="imgcode_input"><input name="vcode" value="" /></div>
+</div>
+<style type="text/css">
+	.layui-m-layercont{
+		padding: 10px;
+	}
+	.imgcode img{
+		width: 100%;
+	}
+	.imgcode_input input{
+		width:96%; border:1px solid #ccc; height: 1.5rem;
+		padding:0 2%;
+		text-align: center;
+		outline: none;
+		-webkit-appearance: none;
+		border-radius: 0;
+	}
+
+</style>
+<script src="__PUBLIC__/Wap/js/layer/layer.js" type="text/javascript" charset="utf-8"></script>	
+<script language="javascript" type="text/javascript">
+	$(function(){
+		$('#sendcode').click(function(){
+			if($('input[name="mobile"]').val() == ''){
+				alertMsg('请输入手机号码');
+				return false;
+			}
+			PostApi('{:U("Api/Vcode/findpwd_sms")}', data, function(data){
+				if(data.returnCode == 1){
+					isWaiting = true;
+					alertMsg(data.returnMsg, function(){
+						var sms_timer = data.result.out_time;
+						var time = null;
+						timer = setInterval(function(){
+							if(sms_timer > 0){
+								sms_timer--;
+								_this.html(sms_timer);
+							}
+							if(sms_timer <= 0){
+								isWaiting = false;
+								_this.removeAttr('disabled');
+								_this.html('重新发送');
+								clearInterval(timer);
+							}
+						},1000);
+					});
+				} else {
+					isWaiting = false;
+					_this.removeAttr('disabled');
+					alertMsg(data.returnMsg);
+				}
+			},'json');
+
+
+		});
+
+	});
+
+$(function(){
+	$('#btn_submit').click(function(){
+		if($('input[name="mobile"]').val() == ''){
+			alertMsg('请输入手机号码');
+			return false;
+		}
+		if($('input[name="vcode"]').val() == ''){
+			alertMsg('请输入短信验证码');
+			return false;
+		}
+		if($('input[name="password"]').val() == ''){
+			alertMsg('请填写新密码');
+			return false;
+		}
+		if($('input[name="password"]').val() != $('input[name="password2"]').val()){
+			alertMsg('二次密码不一致');
+			return false;
+		}
+		AjaxPost('{:U("Api/Login/findPwd")}','forget_form','.forget_btn',function(data){
+			if(data.returnCode == 1){
+				alertMsg(data.returnMsg, '', function(){
+					location.href = "{:U('Wap/Login/index')}";
+				});
+			} else {
+				alertMsg(data.returnMsg);
+				return false;
+			}
+		});
+	});
+});
+</script>
+	</body>
+</html>

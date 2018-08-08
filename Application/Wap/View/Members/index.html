@@ -1,0 +1,67 @@
+<include file="public/header"/>
+<include file="public/top"/>
+<body class="b_eb">
+<!--头部-->
+
+<div class="clearfix" style="height: 1.9rem;"></div>
+
+<div class="personal_center_hea">
+	<span class="headimg"></span>
+	<div class="name"></div>
+	<div class="pho"></div>
+</div>
+
+<div class="personal_center_con">
+	<div class="ht_con_title">功能板块</div>
+	<div class="list_box">
+		<a class="list" href="{:U('Wap/Members/MyAssets')}">
+			<img src="__ROOT__/Public/Wap/img/png12.png"/>
+			<div class="text">我的资产</div>
+		</a>
+		<a class="list" href="{:U('Wap/Members/laborUnion')}">
+			<img src="__ROOT__/Public/Wap/img/png13.png"/>
+			<div class="text">团队/推广</div>
+		</a>
+		<a class="list" href="{:U('Wap/Orders/myOrder')}">
+			<img src="__ROOT__/Public/Wap/img/png14.png"/>
+			<div class="text">订单中心</div>
+		</a>
+		<a class="list" href="{:U('Wap/Members/exchange_center')}">
+			<img src="__ROOT__/Public/Wap/img/png15.png"/>
+			<div class="text">兑换中心</div>
+		</a>
+		<a class="list" href="{:U('Wap/Members/support')}">
+			<img src="__ROOT__/Public/Wap/img/png16.png"/>
+			<div class="text">我的服务</div>
+		</a>
+		<a class="list" href="{:U('Wap/Members/newGuide')}">
+			<img src="__ROOT__/Public/Wap/img/png17.png"/>
+			<div class="text">新手教程</div>
+		</a>
+		<a class="list" href="{:U('Wap/Members/system')}">
+			<img src="__ROOT__/Public/Wap/img/png18.png"/>
+			<div class="text">设置</div>
+		</a>
+	</div>
+</div>
+
+<include file="public/nav"/>
+<include file="public/footer"/>
+<script language="javascript" type="text/javascript">
+	$(function(){
+		//用户信息
+		PostApi("{:U('Api/Members/account')}", {}, function(data){
+			if(data.returnCode){
+				$('.name').append(data.result.username);
+
+				$('.pho').append(data.result.phone);
+
+				var html ='<div class="img_box" style="background: url('+data.result.headimg+') no-repeat center; background-size: cover;"></div>';
+				$('.headimg').append(html);
+
+			}
+		});
+	});
+</script>
+</body>
+</html>

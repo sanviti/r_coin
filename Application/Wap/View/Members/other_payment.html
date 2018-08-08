@@ -1,0 +1,68 @@
+<body class="b_eb">
+	<?php
+            $agent = $_SERVER['HTTP_USER_AGENT'];
+            if(strpos($agent,"Html5Plus") === false){
+        ?>
+	<include file="public/top"/>
+	<?php
+           }else{
+        ?>
+	<style type="text/css">.c_content{margin-top: 0}</style>
+	<?php
+            }
+        ?>
+	<include file="public/header"/>
+	<!--头部-->
+	<div class="clearfix" style="height: 1.9rem;"></div>
+
+	<form action="" method="post" name="edit_form" id="edit_form">
+		<div class="other_payment_methods">
+			<textarea  name="other_payment"  id="other_payment" placeholder="请详细描述支付方式..."></textarea>
+		</div>
+
+		<div class="ht_but"  id="btn_submit" style="margin-top: 1.75rem;">确认</div>
+	</form>
+	</body>
+
+		<include file="public/nav"/>
+		<include file="public/footer"/>
+<script language="javascript" type="text/javascript">
+	$(function(){
+		//修改信息
+		$('#btn_submit').click(function(){
+			if($('textarea[name="other_payment"]').val() == ''){
+				alertMsg('请填写其他支付方式');
+				return false;
+			}
+			AjaxPost('{:U("Api/Members/editMemberDep")}','edit_form','#btn_submit',function(data){
+				if(data.returnCode == 1){
+					alertMsg(data.returnMsg, function(){
+						location.href = "{:U('Wap/Members/memberInfo')}";
+					});
+				} else {
+					alertMsg(data.returnMsg);
+				}
+			});
+		});
+
+		PostApi("{:U('Api/Members/memberInfo')}", {}, function(data){
+			if(data.returnCode){
+				$('#nickname').html(data.result.nickname);
+				$('input[name="nickname"]').val(data.result.nickname);
+				$('#mobile').html(data.result.phone);
+				$('#vip_level').html(data.result.vip_level);
+				$('#member_tag').html(data.result.member_tag);
+				$('textarea[name="member_tag"]').html(data.result.member_tag);
+				$('#other_payment').html(data.result.other_payment);
+				$('input[name="alipay_account"]').val(data.result.alipay_account);
+				$('#weixin_account').html(data.result.weixin_account);
+				
+				$('input[name="weixin_account"]').val(data.result.weixin_account);
+				$('.spinner').remove();
+			}
+		});
+
+	});
+</script>
+	</body>
+</html>

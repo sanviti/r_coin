@@ -1,0 +1,35 @@
+<include file="public/header"/>
+<include file="public/top"/>
+<body style="background-color:#ffffff;">
+
+<!--头部-->
+<div class="clearfix" style="height: 1.9rem;"></div>
+<div class="user_name_box">
+	<div class="title">查到以下用户名：</div>
+	<volist name="list" id="vo" key="val">
+		<div class="list clearfix">
+			<div class="name">{$vo.username}</div>
+			<?php echo'<div class="but" onclick="cypythis';?>{$vo.id}<?php echo '()" name="divename" >';?>复制</div>
+			<input type="text"  name="name{$vo.id}" id="name{$vo.id}" value="{$vo.username}" readonly="readonly" style="opacity:0;" />
+			<?php
+			echo '<script language="javascript" type="text/javascript">
+			function cypythis';
+        ?>{$vo.id}<?php
+			echo '(){
+					var clipBoardContent=document.getElementById("';?>name{$vo.id}<?php echo '");
+					clipBoardContent.select();
+					document.execCommand("Copy");
+					alert("已复制好，可贴粘。");
+				}
+			</script>';
+			?>
+		</div>
+	</volist>
+</div>
+
+<div class="ht_but" style="margin-top: 0.25rem;">返回登录</div>
+
+<include file="public/nav"/>
+<include file="public/footer"/>
+</body>
+</html>

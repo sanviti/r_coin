@@ -1,0 +1,112 @@
+<include file="public/header"/>
+<body style="background: #fff">
+<div class="clearfix" style="height: 4.5rem;"></div>
+<img class="login_logo" src="__ROOT__/Public/Wap/img/jpg2.jpg" />
+<form action="" method="post" name="login_form" id="login_form">
+<div class="login_box">
+	<div class="list">
+		<div class="icon icon1"></div>
+		<input type="text" placeholder="用户名" name="username" value="" id="username" />
+	</div>
+	<div class="list">
+		<div class="icon icon2"></div>
+		<input type="password" placeholder="请输入密码" name="password" value="" id="password"  />
+		<div class="see"></div>
+	</div>
+	<input type="hidden" name="validcode" id="validcode" value="" />
+	<div class="operate_box">
+		<a class="name" href='{:U("Wap/Members/findName_one")}'>找回用户名</a>
+		<a class="retrieve" href='{:U("Wap/Login/findpwd")}'>忘记密码？</a>
+	</div>
+	<div class="ht_but" id="btn_login" >登录</div>
+	<a class="register" href="{:U('Wap/Login/register')}" >换没有账号？ 赶快去<i>注册</i>吧</a>
+</div>
+</form>
+<div id="imgcodebox" style="display: none;">
+	<div class="imgcode"><img src="{:U('Api/Vcode/image')}" /></div>
+	<div class="imgcode_input"><input name="vcode" value="" /></div>
+	<div class="clear"></div>
+</div>
+<style type="text/css">
+	.layui-m-layercont{
+		padding: 30px 20px;
+	}
+	.imgcode img{
+		width: 50%; float: left;
+	}
+	.imgcode_input input{
+		width:45%; border:1px solid #ccc; height: 1.5rem;
+		/*padding:0 2%;*/
+		text-align: center;
+		outline: none;
+		float: right;
+		-webkit-appearance: none;
+		border-radius: 0;
+		outline: none;
+	}
+	.clear{
+		clear:both;
+	}
+
+</style>
+
+</body>
+<script>
+	$(function(){
+		$(".see").click(function(){
+			var val = $("input[name='password']").val();
+			if(val == ""){
+				alertMsg("请输入密码");
+				return false;
+			}
+			if($(this).hasClass("see_on")){
+				$(this).removeClass("see_on");
+				$(this).siblings("input").prop("type","password");
+			} else{
+				$(this).addClass("see_on");
+				$(this).siblings("input").prop("type","text");
+			}
+		})
+
+
+		$('#btn_login').click(function(){
+			var username = $('input[name="username"]');
+			var password = $('input[name="password"]');
+			if(username.val() == ''){
+				alertMsg('请输入用户名');
+				username.focus();
+				return false;
+			}
+			if(password.val() == ''){
+				alertMsg('请输入登录密码');
+				password.focus();
+				return false;
+			}
+			layer.open({
+				anim: 'up'
+				,content: $('#imgcodebox').html()
+				,btn: ['确认', '取消']
+				,yes : function(){
+					imgcode = $('.layui-m-layercont .imgcode_input input');
+					if(isEmpty(imgcode.val())){
+						$('.layui-m-layercont .imgcode_input input').css('borderColor', 'red');
+						imgcode.focus();
+						return;
+					}
+					$('#validcode').val(imgcode.val());
+					AjaxPost('{:U("Api/Login/login")}','login_form','#btn_login',function(data){
+						if(data.returnCode == 1){
+							alertMsg(data.returnMsg, function(){
+								mystorage.set('authtoken',data.result.authtoken);
+								location.href = "{:U('Wap/Members/index')}";
+							});
+						} else {
+							alertMsg(data.returnMsg);
+						}
+					});
+				}
+			});
+		});
+	})
+</script>
+</html>

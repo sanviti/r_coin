@@ -1,0 +1,55 @@
+<include file="public/header"/>
+<include file="public/top"/>
+<body class="b_eb">
+<div class="clearfix" style="height: 1.9rem;"></div>
+<div class="convertibility_setting">
+	<a href="{:U('Wap/Members/my_info')}"><div class="list">
+		<span class="lab">个人资料</span>
+		<span class="icon"></span>
+		<span class="name"></span>
+	</div></a>
+	<a href="{:U('Wap/Members/memberinfo')}"><div class="list">
+		<span class="lab">兑换设置</span>
+		<span class="icon"></span>
+		<span class="name"></span>
+	</div></a>
+	<a href="{:U('Wap/Members/changePwd')}"><div class="list">
+		<span class="lab">登录密码修改</span>
+		<span class="icon"></span>
+		<span class="name"></span>
+	</div></a>
+	<a href="{:U('Wap/Members/changePayPwd')}"><div class="list">
+		<span class="lab">交易密码修改</span>
+		<span class="icon"></span>
+		<span class="name"></span>
+	</div></a>
+	<a href="{:U('Wap/Members/resetPayPwd')}"><div class="list">
+		<span class="lab">忘记交易密码</span>
+		<span class="icon"></span>
+		<span class="name"></span>
+	</div></a>
+	<a href="{:U('Wap/Members/aboutUs')}"><div class="list">
+		<span class="lab">关于我们</span>
+		<span class="icon"></span>
+		<span class="name">V&nbsp;1.0</span>
+	</div></a>
+</div>
+<div class="ht_but" id="btn_submit" >退出登录</div>
+
+<include file="public/nav"/>
+<include file="public/footer"/>
+<script language="javascript" type="text/javascript">
+$(function(){
+	$('#btn_submit').click(function(){
+		PostApi("{:U('Api/Login/loginout')}", {}, function(data){
+			if(data.returnCode == 1){
+				mystorage.clear();
+				location.href = "{:U('Wap/Login/index')}";
+				//$('.spinner').remove();
+			}
+		});
+	});
+});
+</script>
+	</body>
+</html>

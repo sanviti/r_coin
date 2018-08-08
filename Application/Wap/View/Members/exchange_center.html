@@ -1,0 +1,137 @@
+<include file="public/top"/>
+<include file="public/header"/>
+<!--头部-->
+<div class="clearfix" style="height: 1.9rem;"></div>
+
+<div class="money_changer_box clearfix">
+    <i></i>
+    <span class="on"></span>
+    <div class="text fl">矿石</div>
+    <div class="text fr f_blue">富链</div>
+</div>
+
+<form action="" method="post" name="score_form" id="score_form">
+    <div class="money_changer_box1 clearfix">
+        <div class="inp">
+            <input type="text" placeholder="请输入兑换富链的数量" name="rc_num" id="rc_num" value="" />
+            <span class="f_blue" id="all_in">全部兑换</span>
+            <span class="f_blue"></span>
+        </div>
+        <div class="text">可兑换矿石：<input type="text"  name="max_num" id="max_num" value="" /></div>
+        <div class="order_center_time clearfix">
+            <input class="fl" type="password" placeholder="支付密码" name="pay_pwd" id="pay_pwd" value="" />
+            <span class="query tuihuan" id="btn_submit1">确定兑换</span>
+        </div>
+    </div>
+</form>
+<div class="money_changer_box clearfix">
+    <i></i>
+    <span></span>
+    <div class="text fl">富链</div>
+    <div class="text fr">矿机票</div>
+</div>
+
+<form action="" method="post" name="ticket_form" id="ticket_form">
+    <div class="money_changer_box1 clearfix">
+        <div class="inp">
+            <input type="text" placeholder="请输入兑换矿机票的数量" name="mills_num" id="mills_num" value="" />
+            <span class="f_blue" id="all_in2">全部兑换</span>
+        </div>
+        <div class="text">可兑换矿机票：<input type="text"  name="max_mills" id="max_mills" value="" /></div>
+        <div class="order_center_time clearfix">
+            <input class="fl" type="password" placeholder="支付密码" name="pay_pwd2" id="pay_pwd2" value="" />
+            <span class="query"  id="btn_submit2">确定兑换</span>
+        </div>
+    </div>
+</form>
+
+
+<include file="public/nav"/>
+<include file="public/footer"/>
+<script language="javascript" type="text/javascript">
+    $(function(){
+        PostApi("{:U('Api/Minner/maxRc')}", {}, function(data){
+            if(data.returnCode){
+                $('input[name="max_num"]').val(data.result.ore);
+                $('.spinner').remove();
+            }
+        });
+        PostApi("{:U('Api/Minner/maxMills')}", {}, function(data){
+            if(data.returnCode){
+                $('input[name="max_mills"]').val(data.result.score);
+                $('.spinner').remove();
+            }
+        });
+
+        $("#all_in").click(function(){
+            var max_num = $('input[name="max_num"]').val();
+            $('input[name="rc_num"]').val(max_num);
+        });
+
+        $("#all_in2").click(function(){
+            var max_mills = $('input[name="max_mills"]').val();
+            $('input[name="mills_num"]').val(max_mills);
+        });
+
+        //兑换富链
+        $('#btn_submit1').click(function(){
+            if($('input[name="rc_num"]').val() == ''){
+                alertMsg('请填写兑换富链数量');
+                return false;
+            }
+            if($('input[name="pay_pwd"]').val() == ''){
+                alertMsg('请填写支付密码');
+                return false;
+            }
+            if(parseFloat($('input[name="rc_num"]').val()) > parseFloat($('input[name="max_num"]').val()) ){
+                alertMsg('超出可兑换数量');
+                return false;
+            }
+
+            AjaxPost('{:U("Api/Minner/oreToScore")}','score_form','#btn_submit1',function(data){console.log(data);
+
+                if(data.returnCode == 1){
+                    alertMsg(data.returnMsg, function(){
+                        //location.href = "{:U('Wap/Members/exchange_center')}";
+                    });
+                } else {
+                    alertMsg(data.returnMsg);
+                    //location.href = "{:U('Wap/Members/exchange_center')}";
+                }
+            });
+        });
+
+        //兑换矿机票
+        $('#btn_submit2').click(function(){
+            if($('input[name="mills_num"]').val() == ''){
+                alertMsg('请填写兑换矿机票数量');
+                return false;
+            }
+            if($('input[name="pay_pwd2"]').val() == ''){
+                alertMsg('请填写支付密码');
+                return false;
+            }
+//            var mills_num = $('input[name="mills_num"]').val();
+//            var max_mills = $('input[name="max_mills"]').val();
+//            if( mills_num > max_mills ){
+//                alertMsg('超出可兑换数量');
+//                return false;
+//            }
+
+            AjaxPost('{:U("Api/Minner/scoreToMills")}','ticket_form','#btn_submit2',function(data){
+
+                if(data.returnCode == 1){
+                    alertMsg(data.returnMsg, function(){
+                       // location.href = "{:U('Wap/Members/exchange_center')}";
+                    });
+                } else {
+                    alertMsg(data.returnMsg);
+                   // location.href = "{:U('Wap/Members/exchange_center')}";
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
+

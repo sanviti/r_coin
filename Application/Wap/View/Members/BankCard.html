@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale-1.0,user-scalable=no"/>
+	<title></title>
+</head>
+
+<body style="background-color: #ffffff;">
+<?php
+            $agent = $_SERVER['HTTP_USER_AGENT'];
+            if(strpos($agent,"Html5Plus") === false){
+        ?>
+<include file="public/top"/>
+<?php
+           }else{
+        ?>
+<style type="text/css">.c_content{margin-top: 0}</style>
+<?php
+            }
+        ?>
+<include file="public/header"/>
+<!--头部-->
+
+<div class="clearfix" style="height: 1.9rem;"></div>
+
+<div class="c_content mt22"  id="form">
+	<div class="form_box">
+		<form action="" method="post" name="bank_form" id="bank_form">
+			<div class="list">
+				<div class="name">姓名：</div>
+				<input type="text" placeholder="请输入真实姓名" name="card_name" id="card_name" value="" />
+			</div>
+			<div class="list">
+				<div class="name">开户行：</div>
+				<input type="text" placeholder="请输入开户行" name="bank_name" id="bank_name" value="" />
+			</div>
+			<div class="list">
+				<div class="name">卡号：</div>
+				<input type="text" placeholder="请输入卡号" name="card_number" id="card_number" value="" />
+			</div>
+			<div class="ht_but" id="btn_submit">确认</div>
+		</form>
+	</div>
+</div>
+<div class="c_content mt22" style="display:none;" id="auth-tip">
+	<h4 class="auth_title" style="text-align: center;"></h4>
+</div>
+<include file="public/nav"/>
+<include file="public/footer"/>
+<script language="javascript" type="text/javascript">
+$(function(){
+	PostApi("{:U('Api/Members/memberInfo')}", {}, function(data){
+		if(data.returnCode == 1){
+			$('input[name="card_name"]').val(data.result.card_name);
+			$('input[name="bank_name"]').val(data.result.bank_name);
+			$('input[name="card_number"]').val(data.result.card_number);
+			$('.spinner').remove();
+		}
+	});
+  	$('#btn_submit').click(function(){
+		if($('input[name="card_name"]').val() == ''){
+			alertMsg('请填写持卡人姓名');
+			return false;
+		}
+		if($('input[name="bank_name"]').val() == ''){
+			alertMsg('请填写开户行');
+			return false;
+		}
+		if($('input[name="card_number"]').val() == ''){
+			alertMsg('请填写银行卡号');
+			return false;
+		}
+		AjaxPost('{:U("Api/Members/BankCard")}','bank_form','#btn_submit',function(data){
+			if(data.returnCode == 1){
+				alertMsg(data.returnMsg, function(){
+					location.href = "{:U('Wap/Members/index')}";
+				});
+			} else {
+				alertMsg(data.returnMsg);
+			}
+		});
+	});
+});
+</script>
+	</body>
+</html>

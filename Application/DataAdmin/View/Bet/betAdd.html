@@ -1,0 +1,339 @@
+<include file="Public/header"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/DataAdmin/js/plugins/datetimepick/css/lq.datetimepick.css"/>
+<script type="text/javascript" src="__PUBLIC__/DataAdmin/js/plugins/datetimepick/js/lq.datetimepick.js"></script>
+<js file="__PUBLIC__/js/plugins/Ueditor/ueditor.config.js" />
+
+<js file="__PUBLIC__/js/plugins/Ueditor/ueditor.all.min.js" />
+
+<body>
+
+<include file="Public/nav"/>
+
+<div class="down-main">
+
+  <include file="Public/left"/>
+
+  <div class="right-product right-full">
+
+          <!---rightcontent---->
+
+            <div class="container-fluid">
+
+              <div class="info-center">
+
+                <!-- header -->
+
+                <div class="page-header">
+
+	              	<div class="pull-left">
+
+                    <notempty name="detail">
+
+                        <h4>编辑 竞猜</h4> 
+
+                    <else/>
+
+                        <h4>添加 竞猜</h4> 
+
+                    </notempty>	                	     
+
+	            	</div>
+
+	            </div>
+
+                <div class="clearfix"></div>
+
+                <div class="content-list">
+
+
+
+                <!--内容开始-->
+
+					<form class="form-horizontal" method="post" action="" name="basic_validate" id="form">
+
+                            <notempty name="detail">
+
+                                <input type="hidden" name="id" value="{$detail.id}"/>
+
+                            </notempty>
+
+							<div class="form-group">
+                                <label class="col-sm-1 control-label">比赛开始时间</label>
+
+                                <div class="col-sm-6">
+
+                                    <input type="text" name="race_start_time" id="race_start_time" placeholder="输入比赛开始时间" class="form-control" datatype="*" value="{$detail.race_start_time|date='Y-m-d H:i:s',###}">(格式：2018-7-3 12:39)
+
+                                </div>
+
+                            </div>
+							<div class="form-group">
+                                <label class="col-sm-1 control-label">比赛结束时间</label>
+
+                                <div class="col-sm-6">
+
+                                    <input type="text" name="race_end_time" id="race_end_time" placeholder="输入比赛结束时间" class="form-control" datatype="*" value="{$detail.race_end_time|date='Y-m-d H:i:s',###}">(格式：2018-7-3 12:39)
+
+                                </div>
+
+                            </div>
+							
+							<div class="form-group">
+                                <label class="col-sm-1 control-label">投注开始时间</label>
+
+                                <div class="col-sm-6">
+
+                                    <input type="text" name="bet_start_time" id="bet_start_time" placeholder="输入投注开始时间" class="form-control" datatype="*" value="{$detail.bet_start_time|date='Y-m-d H:i:s',###}">(格式：2018-7-3 12:39)
+
+                                </div>
+
+                            </div>
+							<div class="form-group">
+                                <label class="col-sm-1 control-label">投注结束时间</label>
+
+                                <div class="col-sm-6">
+
+                                    <input type="text" name="bet_end_time" id="bet_end_time" placeholder="输入投注结束时间" class="form-control" datatype="*" value="{$detail.bet_end_time|date='Y-m-d H:i:s',###}">(格式：2018-7-3 12:39)
+
+                                </div>
+
+                            </div>
+
+ 
+
+
+
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label">竞猜左上角标题</label>
+
+                                <div class="col-sm-6">
+
+                                    <input type="text" name="title" id="title" placeholder="输入竞猜左上角标题" class="form-control" datatype="*" value="{$detail.title}">
+
+                                </div>
+
+                            </div>
+
+
+
+							<div class="form-group">
+
+                                <label class="col-sm-1 control-label">左边球队名称</label>
+
+                                <div class="col-sm-6">
+
+                                    <input type="text" name="left_team" id="left_team" placeholder="输入左边球队名称" class="form-control" datatype="*" value="{$detail.left_team}">
+
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+
+                                <label class="col-sm-1 control-label">左边球队国旗图标</label>
+
+                                <div class="col-sm-8">
+
+                                    <img src="{$detail.left_team_pic|default="/Public/DataAdmin/images/upload_img.png"}" width="100" class="uploadOne" id="upload_img">
+
+                                    <input type="hidden" name="left_team_pic" id="left_team_pic" class="PicUrl" datatype="*" nullmsg="请上传图片" errormsg="请上传图片" value="{$detail.left_team_pic}"> (90*50)
+
+                                </div>
+
+                            </div>
+							
+							<div class="form-group">
+
+                                <label class="col-sm-1 control-label">右边球队名称</label>
+
+                                <div class="col-sm-6">
+
+                                    <input type="text" name="right_team" id="right_team" placeholder="输入右边边球队名称" class="form-control" datatype="*" value="{$detail.right_team}">
+
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+
+                                <label class="col-sm-1 control-label">右边球队国旗图标</label>
+
+                                 <div class="col-sm-8">
+
+                                    <img src="{$detail.right_team_pic|default="/Public/DataAdmin/images/upload_img.png"}" width="100" class="uploadOne" id="upload_img_two">
+
+                                    <input type="hidden" name="right_team_pic" id="right_team_pic" class="right_team_pic" datatype="*" nullmsg="请上传图片" errormsg="请上传图片" value="{$detail.right_team_pic}"> (90*50)
+
+                                </div> 
+								
+
+                            </div>
+							
+							<div class="form-group">
+
+                                <label class="col-sm-1 control-label">投注总额</label>
+
+                                <div class="col-sm-6">
+
+                                    <input type="text" name="total_bet" id="total_bet" placeholder="输入投注总额" class="form-control" datatype="*" value="{$detail.total_bet}">
+
+                                </div>
+
+                            </div>
+							
+							<div class="form-group">
+
+                                <label class="col-sm-1 control-label">排序</label>
+
+                                <div class="col-sm-6">
+
+                                    <input type="text" name="sort" id="sort" placeholder="输入排序" class="form-control" datatype="*" value="{$detail.sort}">
+
+                                </div>
+
+                            </div>
+
+                            
+
+                             <div class="form-group">
+
+                                <label class="col-sm-1 control-label">比分</label>
+
+                                <div class="col-sm-6">
+
+                                    <input type="text" name="vs_score" id="vs_score" placeholder="输入比分" class="form-control" value="{$detail.vs_score}">(格式：1-3 )
+
+                                </div>
+
+                            </div>
+							
+							<div class="form-group">
+
+                                <label class="col-sm-1 control-label">比赛状况</label>
+
+                                <div class="col-sm-6">
+
+                                    <input type="text" name="win_team" id="win_team" placeholder="输入比分" class="form-control" value="{$detail.win_team}">(1,左边队赢，2右边队赢，3平局)
+
+                                </div>
+
+                            </div>
+							
+
+                            <div class="hr-line-dashed"></div>
+
+                            <div class="form-group">
+
+                                <div class="col-sm-4 col-sm-offset-2">
+
+                                    <button class="Jun-TiJiao" type="submit">保存内容</button>
+
+                                    <a class="btn btn-white" href="javascript:history.go(-1)">取消</a>
+                                    <a class="btn btn-white" href="{:U('openWorldCupPrize',array('id'=>$detail['id']))}">开奖</a>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+					
+
+				<!--内容开始-->
+
+                </div>
+
+                
+
+              </div>
+
+            </div>
+
+  </div>
+
+</div>
+
+</body>
+
+<script type="text/javascript">
+
+	$(function(){
+
+		//表单验证
+
+		checkForm('.form-horizontal', {
+
+	        msgCallback:function(){
+
+	            location.href = '{:U("betList")}';
+
+	        }
+
+	    });
+
+        //图片上传
+
+        bind_uploadOne({
+
+            uploadUrl : '{:U("Upload/uploadImg")}',
+
+            bind : '#upload_img',
+
+            dataType : 'JSON',
+			
+			flag : 'IMG',
+
+            callback : function(data,el){
+
+                if(data.status == 1){
+
+                    $(el).siblings('img').attr('src',data.url);
+
+                    $(el).siblings('input').val(data.url);
+
+                }else{
+
+                    msg(data.info);
+
+                }
+
+            }
+
+        })
+		
+		        //图片上传
+
+        bind_uploadOne({
+
+            uploadUrl : '{:U("Upload/uploadImg")}',
+
+            bind : '#upload_img_two',
+
+            dataType : 'JSON',
+			flag : 'IMGONE',
+
+            callback : function(data,el){
+
+                if(data.status == 1){
+
+                    $(el).siblings('img').attr('src',data.url);
+
+                    $(el).siblings('input').val(data.url);
+
+                }else{
+
+                    msg(data.info);
+
+                }
+
+            }
+
+        })
+
+
+
+
+
+	})	
+
+</script>
+
+<include file="Public/footer"/>

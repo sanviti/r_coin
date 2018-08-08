@@ -1,0 +1,82 @@
+<include file="public/header"/>
+<body class="b_eb">
+<!--头部-->
+<div class="header">
+	<span class="return" onClick="goBack();"></span>
+	<span class="text">订单中心</span>
+</div>
+<div class="clearfix" style="height: 1.9rem;"></div>
+
+<div class="seller_information_trade">
+	<div class="title"><span>卖家交易信息</span></div>
+	<div class="title1">卖家信息</div>
+	<div class="text">姓名：<span id="rname"></span><br/>电话：<span id="phone"></span><br/>RC数量：<span id="opc"></span><br/>市值：¥<span id="total_cny"></span></div>
+	<div class="title1">支付方式</div>
+	<div class="text">微信：<span id="weixin">请联系卖家开启</span><br/>支付宝：<span id="alipay"></span><br/>银行名称：<span id="card_name"></span><br/>持卡人姓名：<span id="bank_name"></span><br/>卡号：<span id="card_number"></span><br/>其他方式：<span id="other">请联系卖家开启</span></div>
+	<div class="title2">凭证：<img src="" id="cert_img" style="width:5rem;" /></div>
+	<div class="text3">交易双方自由选择支付方式，买家需要联系卖家，并协商支付方式，确认后，卖家开启支付方式，买卖双方可通过支付方式进行交易，买家并在12小时内上传相关凭证截图，卖家在上传凭证12小时内完成确认卖出，凭证作为重要的平台维权手段，请务必保持清晰，若发现虚假交易，平台有权冻结账户，永不解封。</div>
+	<div class="but_box clearfix">
+
+	</div>
+</div>
+
+<script language="javascript" type="text/javascript">
+	$(function(){
+		PostApi("{:U('Api/Orders/buy_order')}", {id:{$id}}, function(data){
+			if(data.returnCode == 1){
+				$('#rname').html(data.result.buy_rname);
+				$('#phone').html(data.result.buy_phone);
+				$('#opc').html(data.result.opc);
+				$('#total_cny').html(data.result.total_cny);
+				$('#bank_name').html(data.result.bank_name);
+				$('#card_number').html(data.result.card_number);
+				$('#card_name').html(data.result.card_name);
+				$('#cert_img').attr('src', data.result.cert_img);
+				if(data.result.sell_other !== '请联系卖家开启'){
+					$('#other').addClass('start').attr('data-value',data.result.sell_other).text('点击查看');
+				}else{
+					$('#other').html(data.result.sell_other);
+				}
+				$('#alipay').html(data.result.sell_zfb);
+				$('#weixin').html(data.result.sell_wx);
+
+				var orderStatus = data.result.status;
+				var htmlA = '';
+				switch(orderStatus){
+					case '1':
+						htmlA += '<a href="javascript:history.back();" style="background: #ccc"><div class="but"><span>返回列表</span></div></a>';
+						break;
+					case '3':
+						htmlA += '<a href="{:U('Wap/Orders/certificate/id/' . $id)}"><div class="but but_on fl"><span>上传凭证</span></div></a><a href="javascript:history.back();" style="background: #ccc"><div class="but fr"><span>返回列表</span></div></a>';
+						break;
+					case '4':
+						htmlA += '<a href="javascript:history.back();" style="background: #ccc"><div class="but"><span>返回列表</span></div></a>';
+						break;
+					case '-1':
+					case '-2':
+					case '102':
+						htmlA += '<div class="but"><span>已撤单</span></div>';
+						break;
+					case '101':
+					case '5':
+						htmlA += '<div class="but"><span>已成交</span></div>';
+						break;
+				}
+				$('.but_box').html(htmlA);
+			}
+		});
+
+		$(document).on('click', '.start', function(){
+			layer.open({
+				anim: 'up'
+				,content: $(this).attr('data-value')
+				,btn: ['确定']
+			});
+		})
+	});
+</script>
+
+
+
+</body>
+</html>

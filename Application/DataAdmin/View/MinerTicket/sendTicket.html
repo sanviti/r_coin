@@ -1,0 +1,154 @@
+<include file="Public/header"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/DataAdmin/js/plugins/datetimepick/css/lq.datetimepick.css"/>
+<script type="text/javascript" src="__PUBLIC__/DataAdmin/js/plugins/datetimepick/js/lq.datetimepick.js"></script>
+<js file="__PUBLIC__/js/plugins/Ueditor/ueditor.config.js" />
+
+<js file="__PUBLIC__/js/plugins/Ueditor/ueditor.all.min.js" />
+
+<body>
+
+<include file="Public/nav"/>
+
+<div class="down-main">
+
+  <include file="Public/left"/>
+
+  <div class="right-product right-full">
+
+          <!---rightcontent---->
+
+            <div class="container-fluid">
+
+              <div class="info-center">
+
+                <!-- header -->
+
+                <div class="page-header">
+
+	              	<div class="pull-left">
+
+                    <notempty name="detail">
+
+                        <h4>奖励发放</h4> 
+
+                    <else/>
+
+                        <h4>奖励发放</h4> 
+
+                    </notempty>	                	     
+
+	            	</div>
+
+	            </div>
+
+                <div class="clearfix"></div>
+
+                <div class="content-list">
+
+
+
+                <!--内容开始-->
+
+					<form class="form-horizontal" method="post" action="{:U("saveAward")}" name="basic_validate" id="form">
+
+                            <notempty name="detail">
+
+                                <input type="hidden" name="id" value="{$detail.id}"/>
+
+                            </notempty>
+
+							<div class="form-group">
+                                <label class="col-sm-1 control-label">查到的姓名</label>
+
+                                <div class="col-sm-6">
+
+                                    {$detail.username}
+
+                                </div>
+
+                            </div>
+							<div class="form-group">
+                                <label class="col-sm-1 control-label">查到的手机号</label>
+
+                                <div class="col-sm-6">
+
+                                    {$detail.phone}
+
+                                </div>
+
+                            </div>
+							
+							<div class="form-group">
+
+                                <label class="col-sm-1 control-label">成交奖励</label>
+
+                                <div class="col-sm-6">
+
+                                    <input type="text" name="award" id="award" placeholder="输入成交奖励" class="form-control" datatype="*" value="">*该矿机票为推荐成功加速释放奖励矿机票
+
+                                </div>
+
+                            </div>
+							
+							<div class="form-group">
+
+                                <label class="col-sm-1 control-label">内推奖励</label>
+
+                                <div class="col-sm-6">
+
+                                    <input type="text" name="inviteAward" id="inviteAward" placeholder="输入内推奖励" class="form-control" datatype="*" value="">*该矿机票为推荐成功系统奖励矿机票
+
+                                </div>
+
+                            </div>
+                            
+							
+							<div class="form-group">
+
+                                <label class="col-sm-1 control-label">备注</label>
+
+                                <div class="col-sm-6">
+
+                                    <input type="text" name="extends" id="extends" placeholder="输入备注" class="form-control" datatype="*" value="">
+
+                                </div>
+
+                            </div>
+                            
+
+                            <div class="form-group">
+
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button class="Jun-TiJiao" type="submit">保存内容</button>
+                                    <a class="btn btn-white" href="javascript:history.go(-1)">取消</a>
+                                </div>
+
+                            </div>
+
+                        </form>
+
+					
+
+				<!--内容开始-->
+
+                </div>
+
+                
+
+              </div>
+
+            </div>
+
+  </div>
+
+</div>
+
+</body>
+
+<script type="text/javascript">
+
+
+
+</script>
+
+<include file="Public/footer"/>

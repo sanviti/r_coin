@@ -1,0 +1,135 @@
+<include file="public/header"/>
+<body>
+<div id="miner">
+	<header>
+		<img src="/Public/Wap/img/png1.png" alt="" onClick="goBack();"/>
+		<span>我的矿机</span>
+	</header>
+	<div class="miner-num">
+		<li><p id="millRuning">1</p><span data-type="runing">有效矿机数</span></li>
+		<img src="/Public/Wap/img/tundui1_03.jpg" alt=""/>
+		<li><p id="millStop">0</p><span  data-type="stop">废弃矿机数</span></li>
+
+		<input name="stype" type="hidden" id="stype" value="runing">
+	</div>
+	<div class="dropload-box">
+		<div  class="box">
+
+		</div>
+	</div>
+
+</div>
+<include file="public/nav"/>
+
+
+<script language="javascript" type="text/javascript">
+	var pageStart = 1;
+	var dropload; //下拉加载对象
+	$(function(){
+		//用户信息
+		PostApi("{:U('Api/Mills/millNum')}", {}, function(data){
+			$('#millRuning').html(data.result.millRuning);
+			$('#millStop').html(data.result.millStop);
+		});
+		pageInit();
+	});
+	function pageInit(){
+		//交易数据
+		BindEvent();
+		bindDropload();
+	}
+	function BindEvent(){
+		$('.miner-num span').click(function(){
+			if($(this).hasClass('hover')){
+				return false;
+			}
+			$('.miner-num span').removeClass('hover');
+			$(this).addClass('hover');
+			$('#stype').val($(this).attr('data-type'));
+			$('.box').html('');
+			pageStart = 1;
+			dropload.noData(false);
+			dropload.unlock ();
+			loadDownFn(dropload);
+		});
+	}
+	function bindDropload(){
+		// dropload
+		dropload = $('.dropload-box').dropload({
+			scrollArea : window,
+			domDown : {
+				domClass   : 'dropload-down',
+				domRefresh : '<div class="dropload-refresh">↑上拉加载更多</div>',
+				domLoad    : '<div class="dropload-load"><span class="loading"></span></div>',
+				domNoData  : '<div class="dropload-noData">没有更多数据</div>'
+			},
+			loadDownFn : loadDownFn
+		});
+	}
+
+	//下拉加载回调
+	function loadDownFn(me){
+		PostApi("{:U('Api/Mills/millList')}",
+				{
+					page:pageStart,
+					stype:$('#stype').val(),
+				},function(data){
+					if(data.returnCode == 1 && data.result.list.length > 0) {
+						var html = '';
+						$.each(data.result.list,function(idx,mill){
+							html +=   '<div class="miner-model message">'
+						         	+   '<img src="/Public/Wap/img/mkuangji_0'+mill.type+'.jpg" alt=""/>'
+									+ '<div class="details">'
+									+ '<h6>'+mill.type_name+'</h6>'
+									+ '<li>编号：'+mill.mill_sn+'</li>'
+									+ '<li>算力：'+mill.mill_power+' G</li>'
+									+ '<li>生效时间：'+mill.create_time+'</li>'
+									+ '<li>废弃时间：'+ mill.stop_time+'</li>'
+									+ '<li>产量：'+mill.onehour+'个/小时</li>'
+									+ '<li>累计开采：'+mill.output+'个</li>'
+									+ '<li>状态：'+mill.status+'</li>'
+									+ '<div class="balance">'
+									+ '<p><a href="javascript:clear_account(\''+mill.mill_sn+'\')" style="color:#fff">结算</a></p>'
+									+ '</div>'
+									+ '</div>'
+									+'</div>'
+						});
+						pageStart = data.result.page;
+						$('.box').html(html);
+						me.noData(false);
+					} else {
+						// 无数据
+						me.noData();
+						// 锁定
+						me.lock();
+					}
+					me.resetload();
+				});
+	}
+
+
+	function clear_account(millSn){
+		var mill_sn=millSn;
+		layer.open({
+			content: '你确定现在要结算吗？'
+			,btn: ['结算', '取消']
+			,yes: function(index){
+				PostApi("{:U('Api/Mills/getCoin')}",
+						{
+							millsn:mill_sn
+						},function(data){
+							if(data.returnCode == 1) {
+								alertMsg(data.returnMsg, '', function(){
+									window.location.reload()
+								});
+							} else {
+								alertMsg(data.returnMsg);
+							}
+						});
+			}
+		});
+
+	}
+</script>
+</body>
+</html>

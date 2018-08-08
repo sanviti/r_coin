@@ -1,0 +1,152 @@
+<include file="Public/header"/>
+<style type="text/css">
+	.table tbody tr td{
+		vertical-align: middle;
+	}
+</style>
+<body>
+<include file="Public/nav"/>
+<div class="down-main">
+  <include file="Public/left"/>
+  <div class="right-product right-full">
+          <!---rightcontent---->
+            <div class="container-fluid">
+              <div class="info-center">
+                <!-- header -->
+                <div class="page-header">
+	              	<div class="pull-left">
+	                	<h4>世界杯竞猜开奖管理</h4>      
+	            	</div>
+	            </div>
+                <div class="clearfix"></div>
+                <div class="content-list">    
+                	<!--搜索开始-->
+                	<form name="search" action="{:U('betOpen')}" id="searchForm" method="post">
+					<div class="search-box row">
+						<div class="col-md-9">
+							
+						</div>
+
+						<div class="col-md-3">
+						<div class="btn-group pull-right" role="group" aria-label="...">
+							<!-- <a href="{:U('betAdd')}" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> 新增</a> -->
+						</div>
+						</div>                        
+                    </div>
+                    </form>
+					<!--搜索结束-->
+					<div class="clearfix"></div>
+					<!--内容开始-->
+					<form id="listForm" method="post">
+					<div class="table-margin">
+						<table class="table table-bordered table-header table-hover">
+							<thead>
+								<tr>
+									<th class="w5 text-center"><input type="checkbox" class="selectAll" /></th>
+									<th class="w10 text-center">用户ID</th>																		<th class="w5">昵称</th>									<th class="w10">手机号</th>																		<th class="w10">投注时间</th>									<th class="w8">投注RC数</th>
+                                    <th class="w8">投注状态</th>									<th class="w5">所投球队</th>
+                                    <th class="w10">投注赛次</th>                                    
+									<th class="w15">奖励数</th>
+								</tr>
+							</thead>
+							
+						<notempty name="list">
+							<tbody>
+								<volist name="list" id="vo" key="val">
+									<tr class="long-td">
+										<td class="text-center"><input type="checkbox" name="ids[]" value="{$vo.id}" class="selectAll-item" /></td>
+										<td>											<a href="{:U('bannerEdit',array('id'=>$vo['id']))}">{$vo.userid}</a>										</td>																				<td>											{$vo.nickname}										</td>										<td>
+											{$vo.phone}
+										</td>										<td>											{$vo.bet_time|date='Y-m-d H:i:s',###}										</td>										<td>											{$vo.bet_cost}										</td>										<td class="text-center">											<if condition="$vo.bet_status eq 0">输了											<elseif condition="$vo.bet_status eq 1"/>赢了											<elseif condition="$vo.bet_status eq 2"/>未开奖											</if>											</td>																				<td class="text-center">{$vo.bet_team}</td>											<td class="text-center">{$vo.bet_race_id}</td>											<td class="text-center">{$vo.prize_num}</td>	
+										<!-- <td>
+											<a href="{:U('openPrize',array('id'=>$vo['id']))}">开奖</a>
+											<span class="text-explode">|</span>
+											<a href="javascript:;" class="del" url="{:U('betDel',array('id'=>$vo['id']))}">删除</a>
+										</td> -->
+									</tr>
+								</volist>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td colspan="10">
+											<div class="pull-right">
+												<nav>{$page}</nav>
+											</div>
+										</td>
+									</tr>
+								</tfoot>
+						<else/>
+
+								<tr>
+									<td colspan="10" class="text-center">
+										没有数据拉！
+									</td>
+								</tr>
+						</notempty>
+							
+						</table>
+                    </div>
+					</form>
+					<!--内容结束-->
+                </div>
+                
+              </div>
+            </div>
+  </div>
+</div>
+
+
+
+</body>
+<script type="text/javascript">
+	$(function(){
+
+	    //删除
+	    bind_delete_action('.del');
+	    //批量删除
+	    bind_batch_delete('.batchdel');
+
+	    //批量删除
+	    function bind_batch_delete(selector){
+	    	$(selector).click(function(){
+	    		if(!betch_check()){
+		    		msg('请选择要删除的数据');
+		    		 return false;
+		    	}
+		    	confirm('确定执行批量删除？该操作不能被撤回!',function(){
+		    		send('{:U("BatchDelBanner")}', $('#listForm').serialize());
+		    	})
+		    	
+	    	})
+	    }
+
+	    //发送数据
+	    function send(url, data){
+	    	var params = {
+                url : url,
+                params : data,
+                callback : function(data){
+                    var msgCallBack;
+                    if(data.status == 1){
+                        msgCallBack = function(){
+                            window.location.reload();
+                        }
+                    }
+                    msg(data.info,msgCallBack);
+                }
+            }
+            ajax(params);
+	    }
+
+	    //批量操作检查数据
+	    function betch_check(){
+	    	if($('.selectAll-item:checkbox:checked').length > 0){
+	    		return true;
+	    	}else{
+	    		return false;
+	    	}
+	    }
+
+	})
+</script>
+<include file="Public/footer"/>

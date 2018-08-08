@@ -1,0 +1,103 @@
+<include file="Public/header"/>
+<body>
+<include file="Public/nav"/>
+<link rel="stylesheet" type="text/css" href="http://www.renrengyw.com/Public/Admin/js/plugins/datetimepick/css/lq.datetimepick.css"/>
+<div class="down-main">
+  <include file="Public/left"/>
+  <div class="right-product right-full">
+          <!---rightcontent---->
+            <div class="container-fluid">
+              <div class="info-center">
+                <!-- header -->
+                <div class="page-header">
+	              	<div class="pull-left">
+	                	<h4>价格管理</h4>      
+	            	</div>
+	            </div>
+                <div class="clearfix"></div>
+                <div class="content-list">
+				
+<div class="col-sm-10">
+
+<form action="savePrice" class="form-inline" method="post" id="serche" class="form-inline">
+<div class="form-group"style="margin-top: 3px;">
+<label for="title" class="sr-only">今日价格设置/修改</label>
+&nbsp;&nbsp;&nbsp;&nbsp;<strong  style="font-size:16px;">今日价格设置/修改&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
+
+<strong  style="font-size:14px;">&nbsp;&nbsp;今日价：&nbsp;&nbsp;</strong><input type="text" class="form-control input-sm" id="today_price" placeholder="输入今日价格" name="today_price" value="" size="20"style="font-size:14px;">
+<strong  style="font-size:14px;">&nbsp;&nbsp;今日最高价：&nbsp;&nbsp;</strong><input type="text" class="form-control input-sm" id="today_price_high" placeholder="输入今日最高价" name="today_price_high" value="" size="20"style="font-size:14px;">
+<strong  style="font-size:14px;">&nbsp;&nbsp;今日最低价：&nbsp;&nbsp;</strong><input type="text" class="form-control input-sm" id="today_price_low" placeholder="输入今日最低价" name="today_price_low" value="" size="20"style="font-size:14px;">
+</br>
+</div>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<button button type="submit" class="btn btn-success btn-sm" style="font-size:14px;background-color:rgba(0,120,254,1);height:30px;width:90px;text-align:center;padding:0px;vertical-align:middle ;margin-right:-5px;">提交</button>
+</form>
+</div>
+</br>
+</br></br>
+<div class="col-sm-10">
+<form action="save_next_price" class="form-inline" method="post" id="serche" class="form-inline">
+<div class="form-group"style="margin-top: 3px;">
+<label for="title" class="sr-only">明日价格设置/修改</label>
+&nbsp;&nbsp;&nbsp;&nbsp;<strong  style="font-size:16px;">明日价格设置/修改&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
+<strong  style="font-size:14px;">&nbsp;&nbsp;明日价：&nbsp;&nbsp;</strong><input type="text" class="form-control input-sm" id="tom_price" placeholder="输入明日价格" name="tom_price" value="" size="20"style="font-size:14px;">
+<strong  style="font-size:14px;">&nbsp;&nbsp;明日最高价：&nbsp;&nbsp;</strong><input type="text" class="form-control input-sm" id="tom_price_high" placeholder="输入明日最高价" name="tom_price_high" value="" size="20"style="font-size:14px;">
+<strong  style="font-size:14px;">&nbsp;&nbsp;明日最低价：&nbsp;&nbsp;</strong><input type="text" class="form-control input-sm" id="tom_price_low" placeholder="输入明日最低价" name="tom_price_low" value="" size="20"style="font-size:14px;">
+</br>
+</div>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<button button type="submit" class="btn btn-success btn-sm" style="font-size:14px;background-color:rgba(0,120,254,1);height:30px;width:90px;text-align:center;padding:0px;vertical-align:middle ;margin-right:-5px;">提交</button>
+</form>
+
+
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5><!--<i class="fa fa-tasks"></i>--><span style="font-size:16px;">历史价格列表</span></h5>
+            </div>
+            <div class="ibox-content">
+                <table class="table table-hover">
+                    <thead>
+                    <tr class="long-tr">
+                        <th width="6%" class="tl">价格</th>
+                        <th width="6%" class="tl">最高价</th>
+                        <th width="6%" class="tl">最低价</th>
+                        <th width="10%" class="tl">记录时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <volist name="list" id="vo">
+                        <tr class="long-td">
+						
+                            <td class="tl">{$vo.price}</td>
+                            <td class="tl">{$vo.high}</td>
+                            <td class="tl">{$vo.low}</td>
+                            <td class="tl">{$vo.ctime|date='Y-m-d H:i:s',###}</td>
+
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+                <div align="center" >
+                    <span class="pages">{$page}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                
+              </div>
+            </div>
+  </div>
+</div>
+</body>
+<script type="text/javascript" src="http://www.renrengyw.com/Public/Admin/js/plugins/datetimepick/js/lq.datetimepick.js"></script>
+<script type="text/javascript" src="http://www.renrengyw.com/Public//Admin/js/plugins/datetimepick/js/selectUi.js"></script>
+<script src="__PUBLIC__/Admin/layer/layer.js"></script>
+<script type="text/javascript">
+</script>
+<include file="Public/footer"/>

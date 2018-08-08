@@ -1,0 +1,118 @@
+<include file="public/top"/>
+<include file="public/header"/>
+<link rel="stylesheet" href="/Public/Wap/css/style.css">
+<link rel="stylesheet" href="/Public/Wap/css/swipe.css">
+<link rel="stylesheet" href="/Public/Wap/css/public.css" />
+<link rel="stylesheet" href="/Public/Wap/css/index.css" />
+<!--<script src="/Public/Wap/js/swipe.js"></script>-->
+<script language="javascript" type="text/jav	window.onload = function () {
+				document.documentElement.style.fontSize = document.documentElement.clientWidth / 16 + 'px';
+				window.onresize = function () {
+					document.documentElement.style.fontSize = document.documentElement.clientWidth / 16 + 'px';
+				};
+			}ascript">
+
+var banner=new Swiper(".banner",{
+	speed:100,
+	autoplay:5000,
+	autoplaydisableoninteraction:false,
+	loop:true,
+	pagination:'.banner-pagination',
+	paginationClickable:true
+})
+</script>
+<!--头部-->
+<div class="clearfix" style="height: 1.9rem;"> </div>
+<div id="wripper">
+	<div class="banner swiper-container" id="m_home_banner">
+		<div class="index_banner">
+			<div class="swiper-container">
+				<div class="swiper-wrapper">
+
+				</div>
+				<!-- 如果需要分页器 -->
+				<div class="swiper-pagination"></div>
+			</div>
+		</div>
+		<div class="swiper-pagination banner-pagination"></div>
+	</div>
+	<div class="closeBeta" >
+		<div class="content" >
+			<img src="__ROOT__/Public/Wap/img/neice_05.jpg" alt=""/>
+			<span><a href=""class="notice-href"><input type="text"  name="notice" id="notice" value="" /></a></span>
+		</div>
+	</div>
+	<section >
+		<div class="center">
+			<div class="industry">
+				<img src="__ROOT__/Public/Wap/img/section_12.jpg"/>
+				<img class="diamond" src="__ROOT__/Public/Wap/img/section_09.jpg" alt=""/>
+				<span>行业资讯</span>
+				<img class="diamond" src="__ROOT__/Public/Wap/img/section_09.jpg" alt=""/>
+				<img src="__ROOT__/Public/Wap/img/section_12.jpg" alt=""/>
+			</div>
+			<div class="news" >
+			</div>
+		</div>
+	</section>
+</div>
+<include file="public/nav"/>
+<script language="javascript" type="text/javascript">
+	$(function() {
+		//明细
+		PostApi("{:U('Api/Index/index')}", {}, function (data) {console.log(data);
+			if (data.returnCode == 1) {
+				//banner
+				banner(data.result.banner)
+//				var html = '';
+//				$.each(data.result.banner, function (idx, banner) {
+//					html += '<li class="swiper-slide">';
+//					html +=  '<a href="'+ banner.url +'"><img src="'+  banner.pic_url +'" style="width:100%"/></a>';
+//					html += '</li>';
+//				});
+//				$('.banner-info ul').append(html);
+
+				var htmls = '';
+				$.each(data.result.infos, function (idx, info) {
+					htmls += '<a href="'+  info.url +'" ><div class="list">';
+					htmls += '<dl>';
+					htmls += '<dt>'+  info.title +'</dt>';
+					htmls += '<dd>'+  info.ctime +'</dd>';
+					htmls += '<img src="'+  info.picurl +'" alt=""/>';
+					htmls += '</dl>';
+					htmls += '</div></a>';
+				});
+				$('.news').append(htmls);
+
+				//notice
+				$('input[name="notice"]').val(data.result.notice.title);
+				$(".notice-href").attr("href",""+data.result.notice.url);
+
+			} else {
+				// 无数据
+				me.noData();
+				// 锁定
+				me.lock();
+			}
+			// me.resetload();
+		});
+	});
+
+	//设置banner
+	function banner (ban){
+		var banner = '';
+		$.each(ban, function(k, v){
+			banner += '<a class="swiper-slide" href="'+ v.url +'"><img src="'+  v.pic_url +'"/></a>';
+		})
+		$('.swiper-wrapper').html(banner);
+		//设置滑动
+		var mySwiper = new Swiper ('.swiper-container', {
+			autoplay: true,
+			direction: 'horizontal',
+			loop: true,
+			pagination: {
+				el: '.swiper-pagination',
+			},
+		});
+	}
+</script>

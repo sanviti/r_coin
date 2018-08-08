@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>团队推广1-4-3</title>
+    <link rel="stylesheet" href="css/indexs.css/style.css">
+    <script>
+        window.onload = function () {
+            document.documentElement.style.fontSize = document.documentElement.clientWidth / 16 + 'px';
+            window.onresize = function () {
+                document.documentElement.style.fontSize = document.documentElement.clientWidth / 16 + 'px';
+            };
+        } 
+    </script>
+</head>
+<body>
+    <div id="team">
+        <header>
+            <img src="images/png1.png" alt=""/>
+            <span>团队推广</span>
+        </header>
+        <div class="list">
+            <img src="images/tuandui1_02.jpg" alt=""/>
+           <ul>
+                <li>团队</li>
+                <img src="images/tundui1_03.jpg" alt=""/>
+                <li>推广</li>
+           </ul>
+        </div>
+        <div class="partition">
+            <div class="partition-c"> 
+                    <li><h3>A区</h3><span>人数：20</span><span class="qz">算力：10W</span></li>
+                    <img src="images/tuandui1_05.jpg"/>
+                    <li><h3>B区</h3><span>人数：20</span><span class="qz">算力：10W</span></li> 
+            </div>
+        </div>
+        <div class="team-list">
+            <div class="list-c">
+                <a><p></p><b>团队列表</b></a>
+                <input type="text" class="start" placeholder="起始时间"/>
+                <input type="text" class="end" placeholder="结束时间"/>
+                <input type="text" class="num" placeholder="手机号码"/>
+                    <select id="quyu" class="select">
+                        <option disabled selected style='display:none;'>区域</option>
+                        <option value="都匀">都匀</option>
+                        <option value="福泉">福泉</option>
+                        <option value="遵义">遵义</option>
+                        <option value="兴义">兴义</option>
+                        <option value="安顺">安顺</option>
+                        <option value="凯里">凯里</option>
+                        <option value="毕节">毕节</option>
+                    </select>
+        
+                    <input type="button" value="查询" class="btn"/>
+                </div>
+               
+        </div>
+        <div class="table">
+            <div class="table-c">
+                <div class="table-header">
+                    <span>昵称</span><span>用户名</span><span>矿机算力</span><span>区域</span><span>注册时间</span>
+                </div>
+                <div class="row">
+                    <span>白夜</span><span>啦啦啦</span><span>1000</span><span class="word">A</span><span class="data">2018-06-30 <br/>00：00：00</span>
+                </div>
+                <div class="row">
+                    <span></span><span></span><span></span><span class="word"></span><span class="data"><br/></span>
+                </div>
+                <div class="row">
+                    <span></span><span></span><span></span><span class="word"></span><span class="data"><br/></span>
+                </div>
+                <div class="row">
+                    <span></span><span></span><span></span><span class="word"></span><span class="data"><br/></span>
+                </div>
+                <div class="row">
+                    <span></span><span></span><span></span><span class="word"></span><span class="data"><br/></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

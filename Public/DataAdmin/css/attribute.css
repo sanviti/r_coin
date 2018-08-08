@@ -1,0 +1,50 @@
+.attname_wrap{
+margin-bottom: 10px;
+padding: 5px 0;
+border-bottom: 1px solid #f5f5f5;
+}
+.attrs_wrap{
+margin-bottom: 10px;
+padding: 5px 0;
+}
+.attrs_item{
+width:100px;
+min-height:35px;
+border:1px solid #D4D4D4;
+position: relative;
+padding:5px;
+float: left;
+margin:0 10px 10px 0;
+border-radius: 3px;
+max-height:100px;
+}
+.attrs_item input {position: absolute;left:5px;bottom:5px; width: 88px; background: rgba(255,255,255,.9);border:#fff;
+text-align: center;
+
+}
+.attrs_item img {width: 90px; height: 88px!important; max-width:auto!important;}
+.attrs_item .delAttrVal{
+position: absolute;
+right: 5px;
+top: 5px;
+width: 18px;
+height: 18px;
+background: rgba(0,0,0,.0);
+font-size: 16px;
+text-align: center;
+line-height: 18px;
+color: #fff;
+transition: all .2s;
+border-radius: 0 0 0 5px;
+cursor: pointer;
+}
+.attrs_item .delAttrVal:hover{
+background: #DC2222;
+}
+.delAttr{margin-left:10px;}
+.uploadfile{display: none!important;}
+#stockTable input,#attribute input{
+    height: 24px;
+    font-size:12px;
+    line-height: 24px;
+}

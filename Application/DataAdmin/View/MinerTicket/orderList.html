@@ -1,0 +1,149 @@
+<include file="Public/header"/>
+
+<body>
+<include file="Public/nav"/>
+<div class="down-main">
+  <include file="Public/left"/>
+  <div class="right-product right-full">
+          <!---rightcontent---->
+            <div class="container-fluid">
+              <div class="info-center">
+                <!-- header -->
+                <div class="page-header">
+	              	<div class="pull-left">
+	                	<h4>报单列表</h4>      
+	            	</div>
+	            </div>
+                <div class="clearfix"></div>
+                <div class="content-list">    
+                	<!--搜索开始-->
+                	<form name="search" action="" id="searchForm" method="post">
+					<div class="search-box row">
+						<div class="col-md-9">
+							<div class="form-group">
+								<span class="pull-left form-span">注册手机号:</span>
+								<input type="text" name="phone" value="{:I('phone')}" class="form-control" placeholder=""/>
+							</div>
+							<div class="form-group">
+								<span class="pull-left form-span">用户名:</span>
+								<input type="text" name="username" value="{:I('username')}" class="form-control" placeholder=""/>
+							</div>
+							<!-- <div class="form-group">
+                                <span class="pull-left form-span">用户等级:</span>
+                                <select name="type" class="form-control">
+                                <option value="" <if condition="$Think.request.type heq ''"> selected="selected"</if>>全部类型</option>
+                                <option value="1" <if condition="$Think.request.type heq '1'"> selected="selected"</if>>买入</option>
+                                <option value="2" <if condition="$Think.request.type heq '2'"> selected="selected"</if>>卖出</option>
+                                </select>
+                            </div> -->
+						
+							<div class="form-group">
+								<button class="form-control btn btn-default" id="searchBtn"><span class="glyphicon glyphicon-search"></span> 搜索</button>       
+							</div>
+						</div>                   
+                    </div>
+                    </form>
+					<!--搜索结束-->
+					<div class="clearfix"></div>
+					<!--内容开始-->
+					<form id="listForm" method="post">
+					<div class="table-margin">
+						<table class="table table-bordered table-header table-hover">
+							<thead>
+								<tr>
+									<th class="w5 text-center"><input type="checkbox" class="selectAll" /></th>
+									<th class="w10 text-center">被转赠者UID</th>
+                                    <th class="w5 text-center">用户名</th>
+                                    <th class="w10 text-center">手机号</th>
+                                    <th class="w10 text-center">转赠数量</th>
+                                    <th class="w10 text-center">RC积分</th>
+                                    <th class="w10 text-center">RC锁定积分</th>
+                                    <th class="w10 text-center">矿机票</th>
+                                    <th class="w10 text-center">矿石</th>
+								</tr>
+							</thead>
+							
+						<notempty name="list">
+							<tbody>
+								<volist name="list" id="vo" key="val">
+									<tr class="long-td">
+										<td class="text-center"><input type="checkbox" name="ids[]" value="{$vo.id}" class="selectAll-item" /></td>
+                                        <td class="text-center"><strong>{$vo.uid}</strong></td>
+										<td class="text-center">{$vo.username}</td>
+                                        <td class="text-center">{$vo.phone}</td>
+                                        <td class="text-center">{$vo.num}</td>
+                                        <td class="text-center">{$vo.score}</td>
+                                        <td class="text-center">{$vo.score_lock}</td>
+                                        <td class="text-center">{$vo.mills}</td>
+                                        <td class="text-center">{$vo.ore}</td>
+									</tr>
+								</volist>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td colspan="15">
+											<div class="pull-right">
+												<nav>{$page}</nav>
+											</div>
+										</td>
+									</tr>
+								</tfoot>
+						<else/>
+
+								<tr>
+									<td colspan="15" class="text-center">
+										没有数据拉！
+									</td>
+								</tr>
+						</notempty>
+							
+						</table>
+                    </div>
+					</form>
+					<!--内容结束-->
+                </div>
+                
+              </div>
+            </div>
+  </div>
+</div>
+</body>
+<script type="text/javascript">
+	$(function(){
+		//搜索
+		$('#searchBtn').click(function(){
+			$('#searchForm').submit();
+		})
+
+        //锁定账号
+        bind_lock('.undo');
+        function bind_lock(selector){
+            $(selector).click(function(){
+                var id = $(this).data('id');
+                confirm('确定要强制撤销该订单？',function(){
+                    send('{:U("undoOrder")}',{order_id : id});
+                })
+            })
+        }
+	    //发送数据
+	    function send(url, data){
+	    	var params = {
+                url : url,
+                params : data,
+                callback : function(data){
+                    var msgCallBack;
+                    if(data.returnCode == 1){
+                        msgCallBack = function(){
+                            window.location.reload();
+                        }
+                    }
+                    msg(data.returnMsg,msgCallBack);
+                }
+            }
+            ajax(params);
+	    }
+
+
+	})
+</script>
+<include file="Public/footer"/>

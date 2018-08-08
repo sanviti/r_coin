@@ -1,0 +1,38 @@
+<include file="public/header"/>
+<include file="public/top"/>
+<!--头部-->
+
+<div class="clearfix" style="height: 1.9rem;"></div>
+<form action="" method="post" name="form_sup" id="form_sup">
+	<div class="upload_voucher_box">
+		<div class="title" style="padding-top: 0; padding-bottom: 0.5rem;">问题描述</div>
+		<textarea placeholder="请输入您的问题，我们将尽快给您回复" name="content" value=""></textarea>
+		<input hidden="hidden"  name="problem_type" value="2222"></input>
+		<div class="ht_but" id="btn_submit">提交</div>
+	</div>
+</form>
+<include file="public/nav"/>
+<include file="public/footer"/>
+
+<script language="javascript" type="text/javascript">
+$(function(){
+
+  	$('#btn_submit').click(function(){
+		if($('textarea[name="content"]').val() == ''){
+			alertMsg('请填写问题描述');
+			return false;
+		}
+		AjaxPost('{:U("Api/Members/getproblem")}','form_sup','#btn_submit',function(data){
+			if(data.returnCode == 1){
+				alertMsg(data.returnMsg, function(){
+					location.href = "{:U('Wap/Members/index')}";
+				});
+			} else {
+				alertMsg(data.returnMsg);
+			}
+		});
+	});
+});
+</script>
+	</body>
+</html>

@@ -1,0 +1,70 @@
+<include file="public/header"/>
+	<body class="spinner-hide" style="background: #f1f1f2;">
+		<?php
+            $agent = $_SERVER['HTTP_USER_AGENT'];
+            if(strpos($agent,"Html5Plus") === false){
+        ?>
+            <include file="public/top"/>
+        <?php
+           }else{
+        ?>
+            <style type="text/css">.c_content{margin-top: 0}</style>
+        <?php
+            }
+        ?>
+		
+		<div class="c_content mt22" id="form">
+			<form action="" method="post" name="infoform" id="infoform">
+            <ul>
+				<li>
+					<span>所在区域</span>
+					<input name="region_name" type="text" id="city-picker" />
+				</li>
+				<li>
+					<span>详情地址</span>
+					<input name="address" type="text" id="address" />
+				</li>
+			</ul>
+            </form>
+			<button id="btn_submit">提交</button>
+		</div>
+		<include file="public/nav"/>
+<include file="public/footer"/>
+<script type="text/javascript" src="__ROOT__/Public/Wap/js/weui/jquery-weui.min.js"></script>
+<script type="text/javascript" src="__ROOT__/Public/Wap/js/weui/weui-city.data.js"></script>
+<link rel="stylesheet" type="text/css" href="__ROOT__/Public/Wap/js/weui/jquery-weui.min.css"/>
+<script language="javascript" type="text/javascript">
+$(function(){
+	$("#city-picker").cityPicker({
+        title: "选择省市区/县"
+    });
+	PostApi("{:U('Api/Members/memberInfo')}", {type:1}, function(data){
+		if(data.returnCode == 1){
+			$('#city-picker').val(data.result.province + ' ' + data.result.city + ' ' + data.result.area);
+			$('#address').val(data.result.address);	
+		}
+		$('.spinner').remove();
+	});
+	$('#btn_submit').click(function(){
+		if($('input[name="region_name"]').val() == ''){
+			alertMsg('请选择区域');
+			return false;
+		}
+		if($('input[name="address"]').val() == ''){
+			alertMsg('请填写收货地址');
+			return false;
+		}
+		AjaxPost('{:U("Api/Members/editInfo")}','infoform','#btn_submit',function(data){
+			if(data.returnCode == 1){
+				alertMsg(data.returnMsg, function(){
+					location.href = "{:U('Wap/Members/memberInfo')}";
+				});
+			} else {
+				alertMsg(data.returnMsg);
+			}
+		});
+	});
+});
+</script>
+	</body>
+</html>

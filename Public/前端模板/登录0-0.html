@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale-1.0,user-scalable=no"/>
+		<title></title>
+		<link rel="stylesheet" href="css/public.css" />
+		<link rel="stylesheet" href="css/index.css" />
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js" ></script>
+		<script type="text/javascript" src="js/public.js" ></script>
+	</head>
+	<body>
+		<div class="clearfix" style="height: 4.5rem;"></div>
+		<img class="login_logo" src="images/jpg2.jpg" />
+		
+		<div class="login_box">
+			<div class="list">
+				<div class="icon icon1"></div>
+				<input type="text" placeholder="用户名" name="" value="" />
+			</div>
+			<div class="list">
+				<div class="icon icon2"></div>
+				<input type="password" placeholder="请输入密码" name="pass" value="" />
+				<div class="see"></div>
+			</div>
+			<div class="operate_box">
+				<a class="name">找回用户名</a>
+				<a class="retrieve">忘记密码？</a>
+			</div>
+			<div class="ht_but">登录</div>
+			<a class="register">换没有账号？ 赶快去<i>注册</i>吧</a>
+		</div>
+	</body>
+	<script>
+		$(function(){
+			$(".see").click(function(){
+				var val = $("input[name='pass']").val();
+				if(val == ""){
+					promptBox("请输入密码");
+					return false;
+				}
+				if($(this).hasClass("see_on")){
+					$(this).removeClass("see_on");
+					$(this).siblings("input").prop("type","password");
+				} else{
+					$(this).addClass("see_on");
+					$(this).siblings("input").prop("type","text");
+				}
+			})
+		})
+	</script>
+</html>

@@ -1,0 +1,70 @@
+<include file="public/header"/>
+<body class="spinner-hide" style="background: #f1f1f2;">
+		
+        <?php
+            $agent = $_SERVER['HTTP_USER_AGENT'];
+            if(strpos($agent,"Html5Plus") === false){
+        ?>
+            <div class="header" style="position:relative;">
+                <div class="goback" onClick="goBack();"></div>
+                <div class="title">{$page_title}</div>
+            </div>
+        <?php
+          }
+        ?>
+        <div class="dropload-box fixed-contb">
+            <div class="order">
+			<ul>
+			</ul>
+		</div>
+        </div>
+		<include file="public/nav"/>
+<include file="public/footer"/>
+<link href="__PUBLIC__/Wap/js/dropload/dropload.css" rel="stylesheet">
+<script src="__PUBLIC__/Wap/js/dropload/dropload.min.js"></script>
+<script language="javascript" type="text/javascript">
+$(function(){
+	var pageStart = 1;
+    // dropload
+    $('.dropload-box').dropload({
+        scrollArea : window,
+		domDown : {
+            domClass   : 'dropload-down',
+            domRefresh : '<div class="dropload-refresh">↑上拉加载更多</div>',
+            domLoad    : '<div class="dropload-load"><span class="loading"></span></div>',
+            domNoData  : '<div class="dropload-noData">没有更多数据</div>'
+        },
+        loadDownFn : function(me){
+            PostApi("{:U('Api/Orders/shop_orderList')}", {page:pageStart}, function(data){
+				if(data.returnCode == 1) {
+					var html = '';
+					$.each(data.result.order_list,function(idx,order){
+                        html += '<li>';
+                        html += '<a href="javascript:;">';
+                        html += '<img src="' + order.goods_image + '">';
+                        html += '<div>';
+                        html += '<h1>' + order.goods_name + '</h1>';
+                        html += '<p>RC：' + order.order_amount + '个</p>';
+                        html += '<p>订单号：' + order.order_sn + '</p>';
+                        html += '<span>' + order.add_time + '</span>';
+                        html += '<p>状态：' + order.status + '</p>';
+                        html += '</div>';
+                        html += '</a>';
+                        html += '</li>';
+					});
+					pageStart = data.result.page;
+					$('.order ul').append(html);
+				} else {
+					// 无数据
+					me.noData();
+					// 锁定
+					me.lock();
+				}
+				me.resetload();
+			});
+        }
+    });
+});
+</script>
+	</body>
+</html>

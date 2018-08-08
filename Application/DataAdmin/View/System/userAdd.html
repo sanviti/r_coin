@@ -1,0 +1,205 @@
+<include file="Public/header"/>
+<body>
+<include file="Public/nav"/>
+<div class="down-main">
+  <include file="Public/left"/>
+  <div class="right-product right-full">
+          <!---rightcontent-->
+            <div class="container-fluid">
+              <div class="info-center">
+                <!-- header -->
+                <div class="page-header">
+	              	<div class="pull-left">
+	                	<h4>账号管理</h4>
+	            	</div>
+	            </div>
+                <div class="clearfix"></div>
+                <div class="content-list">
+					<!--内容开始-->
+					<form class="form-horizontal" method="post" action="" name="basic_validate" id="signupForm">
+					<notempty name="admin">
+                    	<input type="hidden" name="id" value="{$admin.id}"/>
+               		</notempty>
+							<div class="form-group">
+								<label class="col-sm-1 control-label">形象照 </label>
+								<div class="col-sm-6">
+										<img id="upload_img" class="img-circle" src="{$admin.userimg|default='/Public/images/headimg_default.png'}" style="width: 80px;height: 80px" />
+										<input type="hidden" name="userimg" id="userimg"/>
+								</div>
+							</div>
+							<div class=""></div>
+							<div class="form-group">
+								<label class="col-sm-1 control-label">姓名</label>
+								<div class="col-sm-6">
+									<input type="text" id="username" name="username" dataType="*" placeholder="输入姓名" class="form-control" value="{$admin.username}">
+								</div>
+							</div>
+							<div class=""></div>
+							<div class="form-group">
+								<label class="col-sm-1 control-label">用户名</label>
+								<div class="col-sm-6">
+									<input type="text" name="user" id="user" placeholder="输入用户名" dataType="*" class="form-control" value="{$admin.user}">
+								</div>
+							</div>
+							<div class=""></div>
+							<div class="form-group">
+								<label class="col-sm-1 control-label">密码</label>
+								<div class="col-sm-6">
+								<notempty name="admin">
+									<input type="password" id="password" value="{$admin.password}" name="password" placeholder="不修改请留空" class="form-control">
+                    			<else/>
+                    				<input type="password" id="password" dataType="*" name="password" placeholder="输入密码" class="form-control">
+               					</notempty>
+
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-1 control-label">备注信息</label>
+								<div class="col-sm-6">
+									<input type="text" name="note" id="note" value="{$admin.note}" placeholder="输入备注信息" class="form-control">
+								</div>
+							</div>
+							<div class=""></div>
+							<div class="form-group">
+								<label class="col-sm-1 control-label">账号状态
+								</label>
+								<div class="col-sm-6">
+								<div class="radio i-checks">
+										<label>
+										<input type="radio" <if condition="$admin.state eq 1">checked="checked"</if> value="1" name="state"> <i></i> 正常</label>
+										<label>
+										<input type="radio" <if condition="$admin.state eq 0">checked="checked"</if> value="0" name="state"> <i></i> 停用</label>
+									</div>
+								</div>
+							</div>
+							<div class=""></div>
+							<!--<div class="form-group">
+								<label class="col-sm-1 control-label">权限选择</label>
+								<div class="col-sm-6">
+									<div class="form-inline">
+									<php>$selected = unserialize($admin['auth_list'])</php>
+									<foreach name="auths" item="vo">
+										<div class="checkbox margin-small-right">
+									        <label>
+									          <input value="{$vo.id}" name="auths[]"<if condition="in_array($vo['id'],$selected)"> checked="checked"</if> type="checkbox"> {$vo.title}
+									        </label>
+									    </div>
+									</foreach>
+									</div>
+								</div>
+							</div>-->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>权限管理</h5>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="ibox-content">
+                                            <div class="tree">
+                                                <ul>
+                                                    <li>
+                                                        <volist name="list" id="vo">
+                                                            <if condition="$vo['pid'] eq 0">
+                                                                <input type="checkbox" name="rule[]" id="ckall" onclick="checkAll();" value="{$vo.id}">{$vo.title}
+                                                                <ul>
+                                                                    <volist name="list" id="menu">
+                                                                        <if condition="$menu['pid'] eq $vo['id']">
+                                                                            <li style="padding-left: 10px">
+                                                                                <input type="checkbox" name="rule[]" id="{$menu.id}" value="{$menu.id}" <php>if(strpos($group,'#'.$menu['id'].'#')>-1){echo "checked";} </php>>{$menu.title}
+                                                                                <eq name="menu['menuflag']" value="1">(菜单)
+                                                                                    <else/>(功能)</eq>
+                                                                                <ul>
+                                                                                    <volist name="list" id="sons">
+                                                                                        <if condition="$sons['pid'] eq $menu['id']">
+                                                                                            <li  style="padding-left: 20px">
+                                                                                                <input type="checkbox" name="rule[]" id="{$sons.id}" value="{$sons.id}" <php>if(strpos($group,'#'.$sons['id'].'#')>-1){echo "checked";} </php>>{$sons.title}
+                                                                                                <eq name="sons['menuflag']" value="1">(菜单)
+                                                                                                    <else/>(功能)</eq>
+                                                                                            </li>
+                                                                                        </if>
+                                                                                    </volist>
+                                                                                </ul>
+                                                                            </li>
+                                                                        </if>
+                                                                    </volist>
+                                                                </ul>
+                                                            </if>
+                                                        </volist>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+							<div class=""></div>
+							<div class="form-group">
+								<div class="col-sm-4 col-sm-offset-2">
+									<button class="Jun-TiJiao" type="submit">保存内容</button>
+									<a class="btn btn-white" href="{:U('System/userList')}">取消</a>
+								</div>
+							</div>
+					</form>
+					<!--内容结束-->
+                </div>
+
+              </div>
+            </div>
+  </div>
+</div>
+</body>
+<script type="text/javascript">
+	$(function(){
+		//表单验证
+		checkForm('#signupForm', {
+	        msgCallback : function(){
+	            location.reload();
+	        }
+	    });
+
+		//头像上传
+	   	bind_uploadOne({
+	   		uploadUrl : '{:U("Upload/uploadImg")}',
+	   		bind : '#upload_img',
+	   		dataType : 'JSON',
+	   		callback : function(data,el){
+	   			if(data.status == 1){
+	   				$(el).siblings('img').attr('src',data.url);
+	   				$(el).siblings('input').val(data.url);
+	   			}else{
+	   				msg(data.info);
+	   			}
+	   		}
+	   	})
+
+
+	})
+</script>
+<script type="text/javascript">
+	function checkAll(){
+
+		if($('#ckall').prop('checked')){
+			//全选
+			$(':checkbox').prop('checked',true);
+			$(':checkbox').each(function(){
+				$(this).parent().addClass('checked');
+			})
+		}else{
+			//反选
+			$(':checkbox').prop('checked',false);
+			$(':checkbox').each(function(){
+				$(this).parent().removeClass('checked');
+			})
+
+		}
+
+	}
+</script>
+<include file="Public/footer"/>

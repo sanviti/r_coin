@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>首页1-1</title>
+    <link rel="stylesheet" href="css/indexs.css/style.css">
+    <link rel="stylesheet" href="css/swipe.css">
+    <script src="js/swipe.js"></script>
+  
+    <script>
+        window.onload = function () {
+            document.documentElement.style.fontSize = document.documentElement.clientWidth / 16 + 'px';
+            window.onresize = function () {
+                document.documentElement.style.fontSize = document.documentElement.clientWidth / 16 + 'px';
+            };
+        } 
+    </script>
+</head>
+<body>
+    <div id="wripper">
+        <header>首页</header>
+        <div class="banner swiper-container" id="m_home_banner">
+			<ul class="swiper-wrapper" id="banner">
+				<li class="swiper-slide"><a href="#"><img src="images/lb_02.png" alt=""/></a></li>
+				<li class="swiper-slide"><a href="#"><img src="images/jpg4.jpg" alt=""/></a></li>
+				<li class="swiper-slide"><a href="#"><img src="images/lb_02.png" alt=""/></a></li>
+				<li class="swiper-slide"><a href="#"><img src="images/lb_02.png" alt=""/></a></li>
+			</ul>
+			<div class="swiper-pagination banner-pagination"></div>	
+	    </div>
+        <div class="closeBeta">
+            <div class="content">
+                <img src="images/neice_05.jpg" alt=""/>
+                <span>6.28正式上线内测了！</span>
+            </div>
+        </div>
+        <section>
+            <div class="center">
+                <div class="industry">
+                    <img src="images/section_12.jpg"/>
+                    <img class="diamond" src="images/section_09.jpg" alt=""/>
+                    <span>行业资讯</span>
+                    <img class="diamond" src="images/section_09.jpg" alt=""/>
+                    <img src="images/section_12.jpg" alt=""/>
+                </div>
+                <div class="list">
+                    <dl>
+                        <dt>风云再起，区块链未来谁执牛耳？ ——2018全球链界风云榜正式揭榜</dt>  
+                        <dd>2018.06.26  08：30：02</dd> 
+                        <img src="images/list_17.jpg" alt=""/> 
+                    </dl>
+                </div>
+                <div class="list">
+                    <dl>
+                        <dt>风云再起，区块链未来谁执牛耳？ ——2018全球链界风云榜正式揭榜</dt>  
+                        <dd>2018.06.26  08：30：02</dd> 
+                        <img src="images/list_17.jpg" alt=""/> 
+                    </dl>
+                </div>
+                <div class="list">
+                    <dl>
+                        <dt>风云再起，区块链未来谁执牛耳？ ——2018全球链界风云榜正式揭榜</dt>  
+                        <dd>2018.06.26  08：30：02</dd> 
+                        <img src="images/list_17.jpg" alt=""/> 
+                    </dl>
+                </div>
+                <div class="list">
+                    <dl>
+                        <dt>风云再起，区块链未来谁执牛耳？ ——2018全球链界风云榜正式揭榜</dt>  
+                        <dd>2018.06.26  08：30：02</dd> 
+                        <img src="images/list_17.jpg" alt=""/> 
+                    </dl>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <a>
+              <img src="images/png6.png" alt=""/>  
+              <span>首页</span>
+            </a>
+            <a>
+              <img src="images/png7.png" alt=""/>  
+              <span>商城</span>
+            </a>
+            <a>
+              <img src="images/png8.png" alt=""/>  
+              <span>交易</span>
+            </a>
+            <a>
+              <img src="images/png19.png" alt=""/>  
+              <span>我的</span>
+            </a>
+        </footer>
+    </div>
+</body>
+<script>
+	var banner=new Swiper(".banner",{
+		speed:400,
+		autoplay:5000,
+		autoplaydisableoninteraction:false,
+		loop:true,
+		pagination:'.banner-pagination',
+		paginationClickable:true
+	 })
+	</script>
+</html>
+
+	

@@ -1,0 +1,99 @@
+.main_canvas{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	overflow: hidden;
+	z-index: 0;
+}
+.accounts{
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+.accounts_top{
+	width: 100%;
+	padding: 0 1rem;
+	position: absolute;
+	top: 3rem;
+	z-index: 999;
+}
+.accounts_top p{
+	font-size: 0.72rem;
+	color: #fff;
+	float: left;
+	line-height: 1rem;
+}
+.accounts_top a{
+	float: right;
+	width: 1.5rem;
+	height: 1rem;
+	background: #3072AB;
+	border-radius: 0.12rem;
+	color: #fff;
+	text-align: center;
+	line-height: 1rem;
+}
+.rotate_box{
+	width: 7rem;
+	height: 7rem;
+	position: absolute;
+	top: 6rem;
+	left: 4rem;
+}
+ .rotate_img{
+  width:7rem;
+  height: 7rem;
+border: 15px solid rgba(0, 89, 151, 1);
+border-left-color: rgba(0, 147, 221, 1);
+border-right-color: rgba(0, 147, 221, 01);
+border-top-color: rgba(0, 89, 151, 1);
+  border-radius: 50%;
+}
+.rotate_running{-webkit-animation:circle 1s infinite linear;}
+ @-webkit-keyframes circle{
+  0%{ transform: rotate(0deg); }
+  100%{ transform: rotate(360deg); }
+ }
+.rotate_box p{
+ 	font-size: 0.64rem;
+ 	color: #FFFFFF;
+ 	background: #52b5fb;
+ 	opacity: 0.9;
+ 	position: absolute;
+ 	top: 50%;
+ 	left: 50%;
+ 	transform: translate(-50%,-50%);
+ 	width: 3rem;
+ 	height: 3rem;
+ 	line-height: 3rem;
+ 	text-align: center;
+ 	border-radius: 50%;
+ 	z-index: 999;
+}
+.bottom_text{
+	width: 100%;
+	height: 6rem;
+	position: absolute;
+	bottom: 2rem;
+	padding: 0 1rem;
+	color: #fff;
+}
+.bottom_text h1{
+	line-height: 1.5rem;
+	font-size: 1.28rem;
+	color: #fff;
+	width:13rem;
+}
+.bottom_text h1 span{
+	font-size: 0.56rem;
+}
+.bottom_text p{
+	font-size: 0.56rem;
+	line-height: 1rem;
+}
+.bottom_text .sunal{
+	width: 50%;
+	/*float: left;*/
+}

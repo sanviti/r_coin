@@ -1,0 +1,67 @@
+<include file="public/header"/>
+<body class="b_eb">
+<!--头部-->
+<div class="header">
+	<span class="return"></span>
+	<span class="text">上传凭证</span>
+</div>
+<div class="clearfix" style="height: 1.9rem;"></div>
+
+<div class="upload_voucher_box">
+	<form action="" method="post" name="cert_form" id="cert_form">
+	<textarea placeholder="留言" name="message"></textarea>
+	<div class="title">请上传转账凭证：</div>
+	<div class="uploading_img">
+	<div class="upload"><img src="/Public/Wap/img/jpg3.jpg"  class="uploadOne" id="upload_img"  /></div>
+	<input type="hidden" name="photo" id="photo">
+	</div>
+		<input type="hidden" name="ordersn" id="ordersn">
+	<div class="ht_but"><button id="btn_submit">提交</button></div>
+	</form>
+</div>
+		<script>
+			$(".upload img").load(function(){
+				$(this).parent().imgSca();
+			})
+
+
+			$(function(){
+				PostApi("{:U('Api/Orders/buy_order')}", {id:{$id}}, function(data){
+					if(data.returnCode == 1){
+						$('#ordersn').val(data.result.order_sn);
+						$('.spinner').remove();
+					}
+				});
+				//图片上传
+				bind_uploadOne({
+					uploadUrl : '{:U("Api/Upload/uploadImg")}',
+					bind : '#upload_img',
+					dataType : 'JSON',
+					callback : function(data,el){
+						if(data.status == 1){
+							$(el).siblings('img').attr('src',data.url);
+							$('#photo').val(data.url);
+						}else{
+							alertMsg(data.info);
+						}
+					}
+				});
+				$('#btn_submit').click(function(){
+					if($('input[name="photo"]').val() == ''){
+						alertMsg('请上传交易凭证');
+						return false;
+					}
+					AjaxPost('{:U("Api/Orders/confirm_pay")}','cert_form','#btn_submit',function(data){
+						if(data.returnCode == 1){
+							alertMsg(data.returnMsg, function(){
+								location.href = "{:U('Wap/Orders/buy_order/id/' . $id)}";
+							});
+						} else {
+							alertMsg(data.returnMsg);
+						}
+					});
+				});
+			});
+		</script>
+</body>
+</html>

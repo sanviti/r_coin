@@ -1,0 +1,81 @@
+<include file="public/header"/>
+<body>
+<?php
+            $agent = $_SERVER['HTTP_USER_AGENT'];
+            if(strpos($agent,"Html5Plus") === false){
+        ?>
+<include file="public/top"/>
+<?php
+           }else{
+        ?>
+<style type="text/css">.c_content{margin-top: 0}</style>
+<?php
+            }
+        ?>
+
+<!--头部-->
+
+<div class="clearfix" style="height: 1.9rem;"></div>
+<form action="" method="post" name="sub_form" id="sub_form">
+<div class="personal_data_hea">
+	<div  class="img" style="background: url(__ROOT__/Public/Wap/img/jpg6.jpg) no-repeat center; background-size: cover;" class="uploadOne" id="upload_img"></div>
+	<input type="hidden" name="photo" id="photo">
+	<div class="text">上传照片</div>
+</div>
+<div class="personal_data_con">
+	<input type="text" placeholder="昵称" id="nickname" name="nickname" class="nickname" value="" />
+	<select name="sex" id="sex">
+		<option value='0' disabled selected style='display:none;'>性别</option>
+		<option value='0'>男</option>
+		<option value='1'>女</option>
+	</select>
+	<input type="text" placeholder="个性签名" name="member_tag" id="member_tag" value="" />
+</div>
+
+<div class="ht_but" id="btn_submit">确认修改</div>
+</form>
+<div class="c_content mt22" style="display:none;" id="auth-tip">
+	<h4 class="auth_title" style="text-align: center;"></h4>
+</div>
+
+<include file="public/nav"/>
+<include file="public/footer"/>
+<script language="javascript" type="text/javascript">
+	$(function(){
+		//图片上传
+		bind_uploadOne({
+			uploadUrl : '{:U("Api/Upload/uploadImg")}',
+			bind : '#upload_img',
+			dataType : 'JSON',
+			callback : function(data,el){
+				if(data.status == 1){
+					$(el).siblings('img').attr('src',data.url);
+					$(el).siblings('input').val(data.url);
+				}else{
+					alertMsg(data.info);
+				}
+			}
+		});
+		$('#btn_submit').click(function(){
+			if($('input[name="nicknanme"]').val() == ''){
+				alertMsg('请填写昵称');
+				return false;
+			}
+			if($('select[name="sex"]').val() == ''){
+				alertMsg('请选择性别');
+				return false;
+			}
+			AjaxPost('{:U("Api/Members/editInfo")}','sub_form','#btn_submit',function(data){
+				if(data.returnCode == 1){console.log(data);
+					alertMsg(data.returnMsg, function(){
+						//location.href = "{:U('Wap/Members/memberInfo')}";
+					});
+				} else {
+					alertMsg(data.returnMsg);
+				}
+			});
+		});
+	});
+</script>
+</body>
+</html>

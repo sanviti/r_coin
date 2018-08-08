@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale-1.0,user-scalable=no"/>
+		<title></title>
+		<link rel="stylesheet" href="css/public.css" />
+		<link rel="stylesheet" href="css/index.css" />
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js" ></script>
+		<script type="text/javascript" src="js/public.js" ></script>
+	</head>
+	<body class="b_eb">
+		<!--头部-->
+		<div class="header">
+			<span class="return"></span>
+			<span class="text">订单中心</span>
+		</div>
+		<div class="clearfix" style="height: 1.9rem;"></div>
+		
+		<div class="order_center_title">
+			<span class="on">进行中</span>
+			<span>已完成</span>
+		</div>
+		
+		<div class="order_center_time clearfix">
+			<input class="fl" type="text" placeholder="起始时间" name="" value="" />
+			<input class="fr" type="text" placeholder="结束时间" name="" value="" />
+			<div class="clearfix"></div>
+			<select class="fl">
+				<option value='' disabled selected style='display:none;'>订单类型</option>
+				<option>订单类型11</option>
+				<option>订单类型22</option>
+			</select>
+			<span class="query">查询</span>
+		</div>
+		
+		<div class="order_center_box">
+			<div class="list">
+				<div class="type type_on"><span>卖出</span></div>
+				<div class="text">委托价格：0.001<br/>委托数量：100<br/>委托时间：2018-07-08  00：00：00<br/>订单状态：匹配中</div>
+				<div class="but"><span>撤销</span></div>
+				<div class="but but1 but_on"><span>查看</span></div>
+			</div>
+			<div class="list">
+				<div class="type type1"><span>买入</span></div>
+				<div class="text">委托价格：0.001<br/>委托数量：100<br/>委托时间：2018-07-08  00：00：00<br/>订单状态：匹配中</div>
+				<div class="but"><span>撤销</span></div>
+				<div class="but but1"><span>查看</span></div>
+			</div>
+			<div class="list">
+				<div class="type type2"><span>卖出</span></div>
+				<div class="text">委托价格：0.001<br/>委托数量：100<br/>委托时间：2018-07-08  00：00：00<br/>订单状态：匹配中</div>
+				<div class="but but1"><span>查看</span></div>
+			</div>
+		</div>
+		
+		<div class="clearfix" style="height: 2.4rem;"></div>
+		<footer>
+			<a class="list">
+				<div class="img_box"><img src="images/png6.png"/></div>
+				<div class="text">首页</div>
+			</a>
+			<a class="list">
+				<div class="img_box"><img src="images/png7.png"/></div>
+				<div class="text">商城</div>
+			</a>
+			<a class="list">
+				<div class="img_box"><img src="images/png8.png"/></div>
+				<div class="text">交易</div>
+			</a>
+			<a class="list on">
+				<div class="img_box"><img src="images/png9.png"/></div>
+				<div class="text">我的</div>
+			</a>
+		</footer>
+		
+		<!---交易密码-->
+		<div class="dialog_overlay" style="display: none;"></div>
+		<div class="confirmation_box confirmation_box1" style="display: none;">
+			<span class="confirmation_box_text">请确认<br/>是否撤销订单，撤销后将不可恢复</span>
+			<input type="text" placeholder="交易密码" name="" value="" />
+			<div class="clearfix"></div>
+			<div class="confirmation_box_but">
+				<span class="confirmation_box_cancel">取消</span>
+				<span class="confirmation_box_confirm">确认</span>
+			</div>
+		</div>
+		
+	</body>
+</html>

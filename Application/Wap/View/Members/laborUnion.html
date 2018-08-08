@@ -1,0 +1,235 @@
+<include file="public/header"/>
+	<script>
+		window.onload = function () {
+			document.documentElement.style.fontSize = document.documentElement.clientWidth / 16 + 'px';
+			window.onresize = function () {
+				document.documentElement.style.fontSize = document.documentElement.clientWidth / 16 + 'px';
+			};
+		}
+	</script>
+
+<body>
+<div class="tuiguang_list" style="display: block">
+<div id="team">
+	<header>
+		<img src="/Public/Wap/img/png1.png" alt="" onClick="goBack();"/>
+		<span>团队推广</span>
+	</header>
+	<div class="list">
+		<img src="/Public/Wap/img/tuandui1_02.jpg" alt="" onClick="goBack();"/>
+		<ul>
+			<li class="type" data-type="tuiguang_list" style="border-bottom: solid 0.075rem #138eff;">团队</li>
+			<img src="/Public/Wap/img/tundui1_03.jpg" alt=""/>
+			<li class="type" data-type="tuiguang">推广</li>
+		</ul>
+	</div>
+	<div class="partition">
+		<div class="partition-c">
+			<li><h3>A区</h3><span>人数：<span id="apeople"></span></span><span class="qz" style=" margin-left: 5%;">算力：<span id="apower"></span>W</span></li>
+			<img src="images/tuandui1_05.jpg"/>
+			<li><h3>B区</h3><span>人数：<span id="bpeople"></span></span><span class="qz" style=" margin-left: 5%;">算力：<span id="bpower"></span>W</span></li>
+		</div>
+	</div>
+	<div class="team-list">
+		<div class="list-c">
+			<a><p></p><b>团队列表</b></a>
+			<input type="text" class="start" placeholder="起始时间" name="begin"  id="begin"   data-options="{'type':'YYYY-MM-DD','beginYear':2010,'endYear':2088}" />
+			<input type="text" class="end" placeholder="结束时间" name="end"  id="end"        data-options="{'type':'YYYY-MM-DD','beginYear':2010,'endYear':2088}"/>
+			<input type="text" class="num" placeholder="手机号码" name="phone" id="phone"/>
+			<!--<select id="quyu" class="select">-->
+				<!--<option disabled selected style='display:none;' name="uarea" id="uarea">区域</option>-->
+				<!--<option value="A">A区</option>-->
+				<!--<option value="B">B区</option>-->
+			<!--</select>-->
+			<input type="button" value="查询" class="btn btn_search"/>
+		</div>
+
+	</div>
+	<div class="table dropload-box">
+		<div class="table-c">
+			<div class="table-header">
+				<span>昵称</span><span>用户名</span><span>矿机算力</span><span>区域</span><span>注册时间</span>
+			</div>
+			<div id="con"></div>
+		</div>
+	</div>
+</div>
+</div>
+
+<div class="tuiguang" style="display: none" >
+<div id="team-tg">
+	<header>
+		<img src="/Public/Wap/img/png1.png" alt="" alt="" onClick="goBack();"/>
+		<span>团队推广</span>
+	</header>
+	<div class="list">
+		<img src="/Public/Wap/img/tuandui1_02.jpg" alt="" onClick="goBack();"/>
+		<ul>
+			<li class="type" data-type="tuiguang_list" >团队</li>
+			<img src="/Public/Wap/img/tundui1_03.jpg" alt=""/>
+			<li class="type" data-type="tuiguang" style="border-bottom: solid 0.075rem #138eff;">推广</li>
+		</ul>
+	</div>
+	<div class="chose">
+		请选择A、B区：
+	</div>
+	<div class="quyu">
+		<p data-area="A" style="color:#000">A</p> <p data-area="B">B</p>
+		<input type="hidden" id="tarea" value="A">
+	</div>
+	<div class="btn">
+		<button id="btngo">下一步</button>
+	</div>
+</div>
+</div>
+<link href="__PUBLIC__/Wap/js/LCalendar/LCalendar.css" rel="stylesheet">
+<script src="__PUBLIC__/Wap/js/LCalendar/LCalendar.js"></script>
+
+
+
+<script type="text/javascript">
+
+	var maxDate = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate()
+	var calendar = new LCalendar();
+	calendar.init({
+		'trigger': '#begin', //标签id
+		'type': 'date', //date 调出日期选择 datetime 调出日期时间选择 time 调出时间选择 ym 调出年月选择,
+		'minDate': (new Date().getFullYear()-3) + '-' + 1 + '-' + 1, //最小日期
+		'maxDate': maxDate //最大日期
+	});
+	var calendar = new LCalendar();
+	calendar.init({
+		'trigger': '#end', //标签id
+		'type': 'date', //date 调出日期选择 datetime 调出日期时间选择 time 调出时间选择 ym 调出年月选择,
+		'minDate': (new Date().getFullYear()-3) + '-' + 1 + '-' + 1, //最小日期
+		'maxDate': maxDate //最大日期
+	});
+
+	var no = 1;
+	var pageStart = 1;
+	var dropload; //下拉加载对象
+	$(function(){
+		PostBindEvent();
+		bindDropload();
+		TeamDatas();
+		bindSerach();
+		AreaBindEvent()
+	})
+
+
+
+	function  TeamDatas(){
+		PostApi("{:U('Api/Members/laborUnion')}", {}, function(data){
+			if(data.returnCode=='1'){
+				console.log(data.result.apeople);
+				$('#apeople').html(data.result.apeople);
+				$('#apower').html(data.result.apower);
+				$('#bpeople').html(data.result.bpeople);
+				$('#bpower').html(data.result.bpower);
+			}
+		});
+	}
+
+
+	function bindSerach(){
+		$('.btn_search').click(function(){
+			$('#con').html('');
+			no = 1;
+			pageStart = 1;
+			dropload.noData(false);
+			dropload.unlock ();
+			loadDownFn(dropload);
+		});
+	}
+
+	//团队 推广
+	function PostBindEvent(){
+		//切换选项卡
+		$('.type').click(function(){
+			if($(this).hasClass('show')){
+				return false;
+			}
+
+			if($(this).data('type') == 'tuiguang_list'){
+				$('.tuiguang_list').show();
+				$('.tuiguang').hide();
+			}else{
+				$('.tuiguang_list').hide();
+				$('.tuiguang').show();
+			}
+		});
+
+	}
+
+	function bindDropload(){
+		dropload=$('.dropload-box').dropload({
+			scrollArea : window,
+			domDown : {
+				domClass   : 'dropload-down',
+				domRefresh : '<div class="dropload-refresh">↑上拉加载更多</div>',
+				domLoad    : '<div class="dropload-load"><span class="loading"></span></div>',
+				domNoData  : '<div class="dropload-noData">没有更多数据</div>'
+			},
+			loadDownFn :loadDownFn
+		});
+	}
+
+
+	function loadDownFn(me){
+
+
+		var data={
+			page:pageStart,
+			begin:$('#begin').val(),
+			end:$('#end').val(),
+			phone:$('#phone').val(),
+		};
+
+		PostApi("{:U('Api/Members/myDirect')}",data, function(data){
+			if(data.returnCode == 1) {
+				var html = '';
+				$.each(data.result.member_list,function(idx,member){
+
+					html +='<div class="row">';
+					html +='<div class="nicheng">' + member.nickname + '</div><div class="users">' + member.username + '</div><div class="num_miner">' + member.team_power + '</div><div class="word">' + member.area + '</div><div class="data">' + member.reg_time + '</div>';
+					html +='</div>';
+
+				});
+				pageStart = data.result.page;
+				$('#con').html(html);
+			} else {
+				// 无数据
+				me.noData();
+				// 锁定
+				me.lock();
+			}
+			me.resetload();
+		});
+	}
+
+
+
+	//推广
+	function AreaBindEvent(){
+		//切换选项卡
+		$('.quyu p').click(function(){
+			$('.quyu p').css({"background-color": "#fff" });
+			$(this).css({"background-color": "#138eff" });
+			$('#tarea').val($(this).attr('data-area'));
+		});
+
+	}
+
+	//下一步
+	 $('#btngo').click(function(){
+		 var area=$('#tarea').val();
+		 var url='/index.php/Wap/Members/Unionrecruit/area/'+area;
+		 window.location.href=url;
+	 });
+
+
+</script>
+
+
+</body>
+</html>

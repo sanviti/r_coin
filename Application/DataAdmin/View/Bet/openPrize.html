@@ -1,0 +1,255 @@
+<include file="Public/header"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/DataAdmin/js/plugins/datetimepick/css/lq.datetimepick.css"/>
+<script type="text/javascript" src="__PUBLIC__/DataAdmin/js/plugins/datetimepick/js/lq.datetimepick.js"></script>
+<js file="__PUBLIC__/js/plugins/Ueditor/ueditor.config.js" />
+
+<js file="__PUBLIC__/js/plugins/Ueditor/ueditor.all.min.js" />
+
+<body>
+
+<include file="Public/nav"/>
+
+<div class="down-main">
+
+  <include file="Public/left"/>
+
+  <div class="right-product right-full">
+
+          <!---rightcontent---->
+
+            <div class="container-fluid">
+
+              <div class="info-center">
+
+                <!-- header -->
+
+                <div class="page-header">
+
+	              	<div class="pull-left">
+
+                    <notempty name="detail">
+
+                        <h4>开奖</h4> 
+
+                    <else/>
+
+                        <h4>开奖</h4> 
+
+                    </notempty>	                	     
+
+	            	</div>
+
+	            </div>
+
+                <div class="clearfix"></div>
+
+                <div class="content-list">
+
+
+
+                <!--内容开始-->
+
+					<form class="form-horizontal" method="post" action="" name="basic_validate" id="form">
+
+                            <notempty name="detail">
+
+                                <input type="hidden" name="id" value="{$detail.id}"/>
+
+                            </notempty>
+
+							<div class="form-group">
+                                <label class="col-sm-1 control-label">投注时间</label>
+
+                                <div class="col-sm-6">
+
+                                    <input type="text" name="bet_time" id="bet_time" placeholder="输入投注时间" class="form-control" datatype="*" value="{$detail.bet_time|date='Y-m-d H:i:s',###}">
+
+                                </div>
+
+                            </div>
+
+							<div class="form-group">
+
+                                <label class="col-sm-1 control-label">投注金额</label>
+
+                                <div class="col-sm-6">
+
+                                    <input type="text" name="bet_cost" id="bet_cost" placeholder="输入左边球队名称" class="form-control" datatype="*" value="{$detail.bet_cost}">
+
+                                </div>
+
+                            </div>
+                           
+						   <div class="form-group">
+
+                                <label class="col-sm-1 control-label">投注场次ID</label>
+
+                                <div class="col-sm-6">
+
+                                    <input type="text" name="bet_race_id" id="bet_race_id" placeholder="输入投注场次ID" class="form-control" datatype="*" value="{$detail.bet_race_id}">
+
+                                </div>
+
+                            </div>
+							
+							<div class="form-group">
+
+                                <label class="col-sm-1 control-label">投注的球队</label>
+
+                                <div class="col-sm-6">
+
+                                    <input type="text" name="bet_team" id="bet_team" placeholder="输入投注的球队称" class="form-control" datatype="*" value="{$detail.bet_team}">
+
+                                </div>
+
+                            </div>
+							
+							
+							
+
+                            
+
+                             <div class="form-group">
+
+                                <label class="col-sm-1 control-label">投注的状态</label>
+
+                                <div class="col-sm-6">
+
+                                    <input type="text" name="bet_status" id="bet_status" placeholder="输入比分" class="form-control" value="{$detail.bet_status}">(格式：0输了，1赢了，2投注中，3平了 )  
+
+                                </div>
+
+                            </div>
+							
+							<div class="form-group">
+
+                                <label class="col-sm-1 control-label">添加本次奖励</label>
+
+                                <div class="col-sm-6">
+
+                                    <input type="text" name="bet_prize" id="bet_prize" placeholder="输入奖励" class="form-control" datatype="*" value="{$prize}"> 总奖池：{$total} 赢得的奖励：{$prize} 
+
+                                </div>
+
+                            </div>
+							
+							
+
+                            <div class="hr-line-dashed"></div>
+
+                            <div class="form-group">
+
+                                <div class="col-sm-4 col-sm-offset-2">
+
+                                    <button class="Jun-TiJiao" type="submit">保存内容</button>
+
+                                    <a class="btn btn-white" href="javascript:history.go(-1)">取消</a>
+
+                                </div>
+
+                            </div>
+
+                        </form>
+
+					
+
+				<!--内容开始-->
+
+                </div>
+
+                
+
+              </div>
+
+            </div>
+
+  </div>
+
+</div>
+
+</body>
+
+<script type="text/javascript">
+
+	$(function(){
+
+		//表单验证
+
+		checkForm('.form-horizontal', {
+
+	        msgCallback:function(){
+
+	            location.href = '{:U("betOpen")}';
+
+	        }
+
+	    });
+
+        //图片上传
+
+        bind_uploadOne({
+
+            uploadUrl : '{:U("Upload/uploadImg")}',
+
+            bind : '#upload_img',
+
+            dataType : 'JSON',
+			
+			flag : 'IMG',
+
+            callback : function(data,el){
+
+                if(data.status == 1){
+
+                    $(el).siblings('img').attr('src',data.url);
+
+                    $(el).siblings('input').val(data.url);
+
+                }else{
+
+                    msg(data.info);
+
+                }
+
+            }
+
+        })
+		
+		        //图片上传
+
+        bind_uploadOne({
+
+            uploadUrl : '{:U("Upload/uploadImg")}',
+
+            bind : '#upload_img_two',
+
+            dataType : 'JSON',
+			flag : 'IMGONE',
+
+            callback : function(data,el){
+
+                if(data.status == 1){
+
+                    $(el).siblings('img').attr('src',data.url);
+
+                    $(el).siblings('input').val(data.url);
+
+                }else{
+
+                    msg(data.info);
+
+                }
+
+            }
+
+        })
+
+
+
+
+
+	})	
+
+</script>
+
+<include file="Public/footer"/>

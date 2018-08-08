@@ -1,0 +1,186 @@
+<include file="public/header"/>
+<body style="background: #fff">
+<!--头部-->
+<div class="header">
+    <span class="return" onclick="goBack();"></span>
+    <span class="text">注册</span>
+</div>
+<div class="clearfix" style="height: 1.9rem;"></div>
+<form action="" method="post" name="register_form" id="register_form">
+<div class="form_box">
+    <div class="list">
+        <div class="name">昵称：</div>
+        <input type="text" placeholder="请输入昵称" name="nickname" value="" />
+    </div>
+    <div class="list">
+        <div class="name">用户名：</div>
+        <input type="text" placeholder="请输入用户名" name="username" value="" />
+    </div>
+    <div class="list">
+        <div class="name">手机号码：</div>
+        <input type="text" placeholder="请输入手机号" name="mobile" value="" />
+    </div>
+    <div class="list list_verification">
+        <div class="name">验证码：</div>
+        <input type="text" placeholder="请输入验证码" name="smscode" value="" />
+        <div class="verification">点击发送</div>
+    </div>
+    <div class="list">
+        <div class="name">登录密码：</div>
+        <input type="password" placeholder="请输入至少6位密码" name="password" value="" />
+    </div>
+    <div class="list">
+        <div class="name">确认密码：</div>
+        <input type="password" placeholder="请输入确认密码" name="password2" value="" />
+    </div>
+    <div class="list">
+        <div class="name">交易密码：</div>
+        <input type="password" placeholder="请输入至少8位密码" name="pay_password" value="" />
+    </div>
+    <div class="list">
+        <div class="name">确认交易密码：</div>
+        <input type="password" placeholder="请输入密码" name="pay_password2" value="" />
+    </div>
+    <div class="list">
+        <div class="name">邀请码：</div>
+        <input type="text" placeholder="请输入邀请码" name="lid" value="{$lid}" />
+    </div>
+    <div class="ht_but" id="register_btn">注册</div>
+</div>
+</form>
+
+<div id="imgcodebox" style="display: none;">
+<div class="imgcode"><img src="{:U('Api/Vcode/image')}" /></div>
+<div class="imgcode_input"><input name="vcode" value="" /></div>
+</div>
+
+<style type="text/css">
+    .layui-m-layercont{
+        padding: 30px 20px;
+    }
+    .imgcode img{
+        width: 50%; float: left;
+    }
+    .imgcode_input input{
+        width:45%; border:1px solid #ccc; height: 1.5rem;
+        /*padding:0 2%;*/
+        text-align: center;
+        outline: none;
+        float: right;
+        -webkit-appearance: none;
+        border-radius: 0;
+        outline: none;
+    }
+    .clear{
+        clear:both;
+    }
+</style>
+
+<script>
+    /*获取验证码*/
+    isWaiting = false;
+    $('.form_box .verification').click(function(){
+        var _this = $(this);
+        if(!isPhoneNo($('input[name="mobile"]').val())){
+            alertMsg('请输入正确的手机号码');
+            return false;
+        }
+        if(isWaiting == true) return;
+        isWaiting = true;
+        layer.open({
+            anim: 'up'
+            ,content: $('#imgcodebox').html()
+            ,btn: ['确认', '取消']
+            ,yes : function(){
+                imgcode = $('.layui-m-layercont .imgcode_input input');
+                if(isEmpty(imgcode.val())){
+                    $('.layui-m-layercont .imgcode_input input').css('borderColor', 'red');
+                    imgcode.focus();
+                    return;
+                }
+                var data = {
+                    validcode : $('.layui-m-layercont .imgcode_input input').val(),
+                    mobile : $('input[name="mobile"]').val()
+                }
+                _this.attr('disabled', true);
+                $.post('{:U("Api/Vcode/reg_sms")}', data, function(data){
+                    if(data.returnCode == 1){
+                        alertMsg(data.returnMsg, function(){
+                            var sms_timer = data.result.out_time;
+                            _this.addClass("verification_on");
+                            var time = null;
+                            timer = setInterval(function(){
+                                if(sms_timer > 0){
+                                    sms_timer--;
+                                    _this.html("重新发送(" + sms_timer + ")");
+                                }
+                                if(sms_timer <= 0){
+                                    isWaiting = false;
+                                    _this.removeAttr('disabled');
+                                    _this.removeClass("verification_on");
+                                    _this.html('重新发送');
+                                    clearInterval(timer);
+                                }
+                            },1000);
+                        });
+                    } else {
+                        isWaiting = false;
+                        _this.removeAttr('disabled');
+                        alertMsg(data.returnMsg);
+                    }
+                },'json');
+            }
+        });
+
+        return false;
+    });
+
+
+    $('#register_btn').click(function(){
+        if($('input[name="nickname"]').val() == ''){
+            alertMsg('请填写昵称');
+            return false;
+        }
+        if($('input[name="username"]').val() == ''){
+            alertMsg('请输入用户名');
+            return false;
+        }
+        if($('input[name="mobile"]').val() == ''){
+            alertMsg('请输入手机号码');
+            return false;
+        }
+
+        if($('input[name="smscode"]').val() == ''){
+            alertMsg('请输入短信验证码');
+            return false;
+        }
+        if($('input[name="password"]').val() == ''){
+            alertMsg('请填写登录密码');
+            return false;
+        }
+        if($('input[name="pay_password"]').val() == ''){
+            alertMsg('请填写交易密码');
+            return false;
+        }
+        if($('input[name="pay_password"]').val().length < 8){
+            alertMsg('填写的交易密码至少8位');
+            return false;
+        }
+        if($('input[name="lid"]').val() == ''){
+            alertMsg('请填写推荐码');
+            return false;
+        }
+        AjaxPost('{:U("Api/Login/reg")}','register_form','#register_btn',function(data){
+            if(data.returnCode == 1){
+                alertMsg(data.returnMsg,'', function(){
+                    location.href = "{:U('Wap/Login/index')}";
+                });
+            } else {
+                alertMsg(data.returnMsg);
+                return false;
+            }
+        });
+    });
+</script>
+</body>
+</html>

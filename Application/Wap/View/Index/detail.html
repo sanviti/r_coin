@@ -1,0 +1,54 @@
+<include file="public/header"/>
+<style type="text/css">
+	.photoelectricity_introduce img{
+		max-width:100%;
+	}
+	.photoelectricity_introduce {
+		width: 12rem;
+		height: auto;
+		margin: 2.6rem auto;
+		margin-top:2.2rem;
+		margin-bottom:2rem;
+	}
+	.photoelectricity_introduce p {
+		font-size: 0.4rem;
+		line-height: 0.96rem;
+	}
+</style>
+<body style="background-color: #ffffff;">
+	<include file="public/top"/>
+
+	<div class="clearfix" style="height: 1.9rem;"></div>
+	<div class="photoelectricity_introduce">
+		<div style="font-size:.6rem; margin-bottom: .8rem">{$title}</div>
+		{$content}
+	</div>
+	<style type="text/css">
+
+		.item{
+			padding: .6rem .4rem;
+			border-top: 1px solid #ddd;
+			font-size: .5rem;
+			width: 90%;
+			margin: 0 auto;
+			color: #555;
+			display: block;
+			background: #fbfbfb;
+		}
+		.item span {
+			font-size: .3rem;
+			color: #888;
+			float: right;
+		}
+	</style>
+	<notempty name="list">
+	<div class="lists">
+		<volist name="list" id="vo">
+		<a class="item" href="{:U('notice',array(id => $vo['id']))}">{:msubstr($vo['title'], 0, 20)}<span>{$vo.add_time|date='Y-m-d H:i',###}</span></a>
+		</volist>
+	</div>
+	</notempty>
+</body>
+<include file="public/nav"/>
+<include file="public/footer"/>
+</html>

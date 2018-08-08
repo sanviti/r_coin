@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale-1.0,user-scalable=no"/>
+		<title></title>
+		<link rel="stylesheet" href="css/public.css" />
+		<link rel="stylesheet" href="css/index.css" />
+		<script type="text/javascript" src="js/jquery-1.8.3.min.js" ></script>
+		<script type="text/javascript" src="js/public.js" ></script>
+	</head>
+	<body class="b_eb">
+		<!--头部-->
+		<div class="header">
+			<span class="text">交易中心</span>
+		</div>
+		<div class="clearfix" style="height: 1.9rem;"></div>
+		
+		<div class="trading_center_title">今日价值趋势</div>
+		<div class="trading_center_data">
+			<div class="list">
+				<div class="text">0.001</div>
+				<div class="name">今开</div>
+			</div>
+			<div class="list">
+				<div class="text f_gre">0.002</div>
+				<div class="name">最高</div>
+			</div>
+			<div class="list">
+				<div class="text">0.001</div>
+				<div class="name">最低</div>
+			</div>
+			<div class="list">
+				<div class="text">0.001</div>
+				<div class="name">昨收</div>
+			</div>
+		</div>
+		
+		<div class="trading_center_line">
+			<div class="ht_con_title">RC价值曲线图</div>
+			<div class="container_box"><div id="container"></div></div>
+		</div>
+		
+		<div class="trading_center_rc">
+			<div class="title">
+				<div class="list list_on">买入RC</div>
+				<div class="list">卖出RC</div>
+			</div>
+			<div class="order_center_time clearfix">
+				<input class="fl" type="text" placeholder="买入价格" name="" value="" />
+				<input class="fr" type="text" placeholder="买入数量" name="" value="" />
+				<div class="clearfix"></div>
+				<input class="fl" type="text" placeholder="支付密码" name="" value="" />
+				<span class="query">确认买入</span>
+			</div>
+			<div class="order_center_pho">
+				<input class="pho" type="text" placeholder="输入手机号搜索" name="" value="" />
+				<div class="list_box">
+					<div class="img" style="background: url(images/jpg5.jpg) no-repeat center; background-size: cover;"></div>
+					<div class="name">路易十六</div>
+					<div class="list_con clearfix">
+						<div class="list">
+							<div class="lab">数量</div>
+							<div class="number">8.00</div>
+						</div>
+						<div class="list">
+							<div class="lab">价值</div>
+							<div class="number">0.008</div>
+						</div>
+						<div class="list">
+							<div class="lab">成交</div>
+							<div class="number">8</div>
+						</div>
+					</div>
+					<div class="but">卖出</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="clearfix" style="height: 2.4rem;"></div>
+		<footer>
+			<a class="list">
+				<div class="img_box"><img src="images/png6.png"/></div>
+				<div class="text">首页</div>
+			</a>
+			<a class="list">
+				<div class="img_box"><img src="images/png7.png"/></div>
+				<div class="text">商城</div>
+			</a>
+			<a class="list on">
+				<div class="img_box"><img src="images/png20.png"/></div>
+				<div class="text">交易</div>
+			</a>
+			<a class="list">
+				<div class="img_box"><img src="images/png19.png"/></div>
+				<div class="text">我的</div>
+			</a>
+		</footer>
+		
+		<script type="text/javascript" src="js/echarts.min.js" ></script>
+		<script>
+			var myChart = echarts.init(document.getElementById('container'));
+			option = {
+			    xAxis: {
+			        type: 'category',
+			        data: ['06-10', '06-11', '06-12', '06-13', '06-14']
+			    },
+			    yAxis: {
+			        type: 'value'
+			    },
+			    series: [{
+			        data: [0.001, 0.002, 0.003, 0.004, 0.005],
+			        type: 'line'
+			    }]
+			};
+			myChart.setOption(option);
+		</script>
+		
+	</body>
+</html>

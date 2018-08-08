@@ -1,0 +1,60 @@
+<include file="public/header"/>
+<script>
+	window.onload = function () {
+	document.documentElement.style.fontSize = document.documentElement.clientWidth / 16 + 'px';
+	window.onresize = function () {
+	document.documentElement.style.fontSize = document.documentElement.clientWidth / 16 + 'px';
+	};
+	}
+</script>
+<body>
+<div id="team-share">
+	<header>
+		<img src="/Public/Wap/img/png1.png" alt="" onClick="goBack();"/>
+		<span>分享</span>
+		<img class="shade" src="/Public/Wap/img/tuanduifengxiang_02.jpg" alt="" />
+	</header>
+	<section>
+		<div class="section-c">
+			<b>RC富链</b>
+			<p>富人生  链天下</p>
+			<div class="code">
+				<div class="code-top" id="shareid">
+				</div>
+				<div class="code-bottom">
+					<div id="union-box">
+					</div>
+					<p>扫描二维码，加入富链共创未来</p>
+				</div>
+			</div>
+			<div class="copy-link">
+				<input type="text"  id="copyurl" />
+				<p onclick="cypythis()" style="top: 0rem;">复制链接</p>
+			</div>
+		</div>
+
+	</section>
+</div>
+
+
+<input type="hidden" name="area" id="area" value="{$area}">
+<script language="javascript" type="text/javascript">
+	$(function(){
+		var area=$('#area').val();
+		PostApi("{:U('Api/Members/share')}", {area:area}, function(data){
+			if(data.returnCode == 1){
+				$('#shareid').html(data.result.shareid);
+				$('#union-box').html('<img src="' + data.result.qrcode + '"/>');
+				$('.copy-link input').val(data.result.url)
+			}
+		});
+	});
+	function cypythis(){
+		var clipBoardContent=document.getElementById("copyurl");
+		clipBoardContent.select();
+		document.execCommand("Copy");
+		alert("已复制好，可贴粘。");
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<include file="public/header"/>
+<include file="public/top"/>
+<body class="b_eb">
+<!--头部-->
+<div class="header header_on">
+	<span class="return" onClick="goBack();"></span>
+	<span class="text">我的资产</span>
+</div>
+<div class="clearfix" style="height: 1.9rem;"></div>
+
+<div class="my_assets">
+	<div class="my_assets_text1"></div>
+	<div class="my_assets_text2"></div>
+	<div class="list_box">
+		<div class="list">
+			<div class="icon" id="rich-chain1"></div>
+			<div class="text">富链</div>
+			<div class="text1"><div class="rich-chain1"></div></div>
+			<div class="but_box">
+				<div class="but"><a href="{:U('Wap/Deal/index')}">交易</a></div>
+				<div class="but but1"><a href="{:U('Wap/Miner/rcBill')}">详情</a></div>
+			</div>
+		</div>
+		<div class="list">
+			<div class="icon" id="rich-chain2"></div>
+			<div class="text">富链</div>
+			<div class="text1"><div class="rich-chain2"></div></div>
+			<div class="but_box">
+				<div class="but"><a href="{:U('Wap/Members/exchange_center')}">使用</a></div>
+				<div class="but but1"><a href="{:U('Wap/Miner/rcBill')}">详情</a></div>
+			</div>
+		</div>
+		<div class="list">
+			<div class="icon" id="stone-miner"></div>
+			<div class="text">矿石</div>
+			<div class="text1"><div class="stone-miner"></div></div>
+			<div class="but_box">
+				<div class="but"><a href="{:U('Wap/Members/exchange_center')}">兑换</a></div>
+				<div class="but but1"><a href="{:U('Wap/Miner/oreBill')}">详情</a></div>
+			</div>
+		</div>
+		<div class="list">
+			<div class="icon" id="miner-miner"></div>
+			<div class="text">矿机</div>
+			<div class="text1"><div class="miner-miner"></div></div>
+			<div class="but_box">
+				<div class="but"><a href="{:U('Wap/Shop/index')}">兑换</a></div>
+				<div class="but but1"><a href="{:U('Wap/Wallet/millList')}">详情</a></div>
+			</div>
+		</div>
+		<div class="list">
+			<div class="icon" id="tiket-miner"></div>
+			<div class="text">矿机票</div>
+			<div class="text1"><div class="tiket-miner"></div></div>
+			<div class="but_box">
+				<div class="but"><a href="{:U('Wap/Miner/sendMills')}">赠送</a></div>
+				<div class="but but1"><a href="{:U('Wap/Miner/minerBill')}">详情</a></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<include file="public/nav"/>
+<include file="public/footer"/>
+<script language="javascript" type="text/javascript">
+	$(document).on('click', '#rich-chain1', function() {
+		var content = '';
+		content+='<div class="dialog_overlay"></div>';
+		content+='<div class="my_assets_dialog">';
+		content+='<div class="name">可交易富链</div>';
+		content+='<div class="text">富链RC是通过矿机生产矿石，由矿石1:1兑换，富链可以直接在交易中心交易。</div>';
+		content+='<div class="but" id="close-layer">我知道了</div>';
+		content+='</div>';
+		layer.open({type: 1, skin: 'layui-layer-rim', area: ['15rem', '300px'], content: content});
+	})
+
+	$(document).on('click', '#rich-chain2', function() {
+		var content = '';
+		content+='<div class="dialog_overlay"></div>';
+		content+='<div class="my_assets_dialog">';
+		content+='<div class="name">可使用富链</div>';
+		content+='<div class="text">富链RC是通过矿机生产矿石，由矿石1:1兑换，富链可以直接在交易中心交易。</div>';
+		content+='<div class="but" id="close-layer">我知道了</div>';
+		content+='</div>';
+		layer.open({type: 1, skin: 'layui-layer-rim', area: ['15rem', '300px'], content: content});
+	})
+
+	$(document).on('click', '#stone-miner', function() {
+		var content = '';
+		content+='<div class="dialog_overlay"></div>';
+		content+='<div class="my_assets_dialog">';
+		content+='<div class="name">可使用矿石</div>';
+		content+='<div class="text">矿石，由矿机产出，矿石可以兑换富链。</div>';
+		content+='<div class="but" id="close-layer">我知道了</div>';
+		content+='</div>';
+		layer.open({type: 1, skin: 'layui-layer-rim', area: ['15rem', '300px'], content: content});
+	})
+
+	$(document).on('click', '#miner-miner', function() {
+		var content = '';
+		content+='<div class="dialog_overlay"></div>';
+		content+='<div class="my_assets_dialog">';
+		content+='<div class="name">已拥有矿机</div>';
+		content+='<div class="text">矿机通过矿机票兑换产生，矿机产出矿石。</div>';
+		content+='<div class="but" id="close-layer">我知道了</div>';
+		content+='</div>';
+		layer.open({type: 1, skin: 'layui-layer-rim', area: ['15rem', '300px'], content: content});
+	})
+
+	$(document).on('click', '#tiket-miner', function() {
+		var content = '';
+		content+='<div class="dialog_overlay"></div>';
+		content+='<div class="my_assets_dialog">';
+		content+='<div class="name">可用矿机票</div>';
+		content+='<div class="text">矿机票可以兑换矿机。</div>';
+		content+='<div class="but" id="close-layer">我知道了</div>';
+		content+='</div>';
+		layer.open({type: 1, skin: 'layui-layer-rim', area: ['15rem', '300px'], content: content});
+	})
+
+	$(document).on('click', '#close-layer', function() {
+		layer.closeAll();
+	})
+	$(function(){
+		//用户信息
+		PostApi("{:U('Api/Members/myAssets')}", {}, function(data){
+			if(data.returnCode){
+				var my_assets_text1= '今天是'+data.result.today;
+				$('.my_assets_text1').append(my_assets_text1);
+
+				var my_assets_text2= '你已加入富链<i class="f_gre">'+data.result.reg_time+'</i>天';
+				$('.my_assets_text2').append(my_assets_text2);
+
+				$('.rich-chain1').append(data.result.score);
+
+				$('.rich-chain2').append(data.result.score);
+
+				$('.stone-miner').append(data.result.ore);
+
+				$('.miner-miner').append(data.result.millNum);
+
+				$('.tiket-miner').append(data.result.mills);
+
+			}
+		});
+	});
+</script>
+</body>
+</html>

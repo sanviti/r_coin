@@ -1,0 +1,100 @@
+<include file="public/header"/>
+<body style="background-color: #ffffff;">
+<?php
+            $agent = $_SERVER['HTTP_USER_AGENT'];
+            if(strpos($agent,"Html5Plus") === false){
+        ?>
+<include file="public/top"/>
+<?php
+           }else{
+        ?>
+<style type="text/css">.c_content{margin-top: 0}</style>
+<?php
+            }
+        ?>
+
+<!--头部-->
+
+<div class="clearfix" style="height: 1.9rem;"></div>
+<div class="c_content mt22" style="display:none;" id="form">
+<div class="form_box">
+	<form action="" method="post" name="c2_form" id="c2_form">
+	<div class="list">
+		<div class="name">真实姓名：</div>
+		<input type="text" placeholder="请输入真实姓名" name="rname" value="" />
+	</div>
+	<div class="list">
+		<div class="name">身份证号码：</div>
+		<input type="text" placeholder="请输入18位号码" name="idcard" value="" />
+	</div>
+	<div class="uploading_img">
+		<div class="upload_name">请按图示上传照片：</div>
+		<img class="upload_img" src="__ROOT__/Public/Wap/img/jpg1.jpg" class="uploadOne" id="upload_img" />
+		<input type="hidden" name="photo" id="photo">
+		<div class="upload_text"><i>*注：</i>1.本人手持身份证件，以及手写的“富链RC认证字条”照片。<br/>2.拍摄的照片必须可以看清身份证上的信息，不可遮挡有效信息。<br/>3.必须是本人身份证，如果发现伪造，造假等行为，平台有权进行封号，一经封号，永不解封。</div>
+	</div>
+	<div class="ht_but" id="btn_submit">确认上传</div>
+	</form>
+</div>
+</div>
+<div class="c_content mt22" style="display:none;" id="auth-tip">
+	<h4 class="auth_title" style="text-align: center;"></h4>
+</div>
+
+<include file="public/nav"/>
+<include file="public/footer"/>
+<script language="javascript" type="text/javascript">
+	$(function(){
+		PostApi("{:U('Api/Members/query_auth')}", {type:2}, function(data){
+			if(data.returnCode == 1){
+				if(data.result.status == 0){
+					$('.auth_title').html('<h2>您的认证信息已提交，请等待审核</h2>');
+					$('#auth-tip').show();
+				} else if(data.result.status == 1){
+					$('.auth_title').html('恭喜，您的认证信息已通过审核');
+					$('#auth-tip').show();
+				} else {
+					$('#form').show();
+				}
+			} else {
+				$('#form').show();
+			}
+			$('.spinner').remove();
+		});
+		//图片上传
+		bind_uploadOne({
+			uploadUrl : '{:U("Api/Upload/uploadImg")}',
+			bind : '#upload_img',
+			dataType : 'JSON',
+			callback : function(data,el){
+				if(data.status == 1){
+					$(el).siblings('img').attr('src',data.url);
+					$(el).siblings('input').val(data.url);
+				}else{
+					alertMsg(data.info);
+				}
+			}
+		});
+		$('#btn_submit').click(function(){
+			if($('input[name="rname"]').val() == ''){
+				alertMsg('请填写姓名');
+				return false;
+			}
+			if($('input[name="idcard"]').val() == ''){
+				alertMsg('请填写身份证号码');
+				return false;
+			}
+			AjaxPost('{:U("Api/Members/auth_c2")}','c2_form','#btn_submit',function(data){
+				if(data.returnCode == 1){
+					alertMsg(data.returnMsg, function(){
+						location.href = "{:U('Wap/Members/memberInfo')}";
+					});
+				} else {
+					alertMsg(data.returnMsg);
+				}
+			});
+		});
+	});
+</script>
+</body>
+</html>

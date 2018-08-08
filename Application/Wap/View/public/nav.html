@@ -1,0 +1,104 @@
+<?php
+		if((CONTROLLER_NAME == 'Index' AND ACTION_NAME == 'index') OR 
+		(CONTROLLER_NAME == 'Deal' AND ACTION_NAME == 'index') OR 
+		(CONTROLLER_NAME == 'Shop' AND ACTION_NAME == 'index') OR
+		(CONTROLLER_NAME == 'Members' AND ACTION_NAME == 'index') ){
+?>
+			
+		<footer style="background-color: #138eff;">
+			<?php
+					if(CONTROLLER_NAME == 'Index' AND ACTION_NAME == 'index'){
+			?>
+			<a href="{:U('Wap/Index/index')}">
+				<em class="list on">
+					<div class="img_box"><img src="__ROOT__/Public/Wap/img/23.png"/></div>
+					<div class="text">首页</div>
+				</em>
+			</a>
+			<?php
+					}else{
+			?>
+			<a href="{:U('Wap/Index/index')}">
+				<em class="list">
+					<div class="img_box"><img src="__ROOT__/Public/Wap/img/png6.png"/></div>
+					<div class="text">首页</div>
+				</em>
+			</a>
+			<?php
+					}
+			?>
+
+			<?php
+					if(CONTROLLER_NAME == 'Shop' AND ACTION_NAME == 'index'){
+			?>
+			<a href="{:U('Wap/Shop/index')}">
+				<em class="list on">
+					<div class="img_box"><img src="__ROOT__/Public/Wap/img/png21.png"/></div>
+					<div class="text">商城</div>
+				</em>
+			</a>
+			<?php
+					}else{
+			?>
+			<a href="{:U('Wap/Shop/index')}">
+				<em class="list">
+					<div class="img_box"><img src="__ROOT__/Public/Wap/img/png7.png"/></div>
+					<div class="text">商城</div>
+				</em>
+			</a>
+			<?php
+					}
+			?>
+
+
+			<?php
+					if(CONTROLLER_NAME == 'Deal' AND ACTION_NAME == 'index'){
+			?>
+			<a href="{:U('Wap/Deal/index')}">
+				<em class="list on">
+					<div class="img_box"><img src="__ROOT__/Public/Wap/img/png20.png"/></div>
+					<div class="text">交易</div>
+				</em>
+			</a>
+			<?php
+					}else{
+			?>
+			<a href="{:U('Wap/Deal/index')}">
+				<em class="list">
+					<div class="img_box"><img src="__ROOT__/Public/Wap/img/png8.png"/></div>
+					<div class="text">交易</div>
+				</em>
+			</a>
+			<?php
+
+					}
+			?>
+			<?php
+					if(CONTROLLER_NAME == 'Members' AND ACTION_NAME == 'index'){
+			?>
+			<a href="{:U('Wap/Members/index')}">
+				<em class="list on">
+					<div class="img_box"><img src="__ROOT__/Public/Wap/img/png9.png"/></div>
+					<div class="text">我的</div>
+				</em>
+			</a>
+			<?php
+					}else{
+			?>
+			<a href="{:U('Wap/Members/index')}">
+				<em class="list">
+					<div class="img_box"><img src="__ROOT__/Public/Wap/img/png19.png"/></div>
+					<div class="text">我的</div>
+				</em>
+			</a>
+			<?php
+					}
+			?>
+
+		</footer>
+<?php
+	}else{
+?>
+<?php
+		}
+?>

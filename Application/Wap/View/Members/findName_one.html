@@ -1,0 +1,80 @@
+<include file="public/header"/>
+<body style="background-color:#ffffff;">
+<?php
+            $agent = $_SERVER['HTTP_USER_AGENT'];
+            if(strpos($agent,"Html5Plus") === false){
+        ?>
+<include file="public/top"/>
+<?php
+           }else{
+        ?>
+<style type="text/css">.c_content{margin-top: 0}</style>
+<?php
+            }
+        ?>
+
+<!--头部-->
+
+<div class="clearfix" style="height: 1.9rem;"></div>
+<form action="" method="post" name="sub_form" id="sub_form">
+	<div class="form_box">
+		<div class="list">
+			<div class="name">手机号码：</div>
+			<input type="text" placeholder="请输入手机号" name="mobile" id="mobile" class="mobile" value="" />
+		</div>
+		<div class="list list_verification">
+			<div class="name">验证码：</div>
+			<input type="text" placeholder="请输入验证码" name="vcode" id="vcode" class="vcode" value="" />
+			<div class="verification" id="btn_submit2" >点击发送</div>
+		</div>
+	</div>
+<div class="ht_but" id="btn_submit">下一步</div>
+</form>
+<div class="c_content mt22" style="display:none;" id="auth-tip">
+	<h4 class="auth_title" style="text-align: center;"></h4>
+</div>
+
+<include file="public/nav"/>
+<include file="public/footer"/>
+<script language="javascript" type="text/javascript">
+	$(function(){
+		$('#btn_submit2').click(function(){
+			if($('input[name="mobile"]').val() == ''){
+				alertMsg('请填写手机号');
+				return false;
+			}
+			AjaxPost('{:U("Api/Vcode/findname_sms")}','sub_form','#btn_submit2',function(data){
+				if(data.returnCode == 1){
+					alertMsg(data.returnMsg, function(){
+						//location.href = "{:U('Wap/Members/findName_two')}";
+					});
+				} else {
+					alertMsg(data.returnMsg);
+				}
+			});
+		});
+
+		$('#btn_submit').click(function(){
+			if($('input[name="phone"]').val() == ''){
+				alertMsg('请填写手机号');
+				return false;
+			}
+			if($('select[name="vcode"]').val() == ''){
+				alertMsg('请填写验证码');
+				return false;
+			}
+			AjaxPost('{:U("Api/Login/findName")}','sub_form','#btn_submit',function(data){
+				if(data.returnCode == 1){
+					alertMsg(data.returnMsg, function(){
+						var phone_num = $('input[name="mobile"]').val();
+						location.href = "{:U('Wap/Members/findName_two')}"+"?phone_num="+phone_num;
+					});
+				} else {
+					alertMsg(data.returnMsg);
+				}
+			});
+		});
+	});
+</script>
+</body>
+</html>

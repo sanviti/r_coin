@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale-1.0,user-scalable=no"/>
+	<title></title>
+</head>
+<body class="b_eb">
+<br>
+<?php
+            $agent = $_SERVER['HTTP_USER_AGENT'];
+            if(strpos($agent,"Html5Plus") === false){
+        ?>
+<include file="public/top"/>
+<?php
+           }else{
+        ?>
+<style type="text/css">.c_content{margin-top: 0}</style>
+<?php
+            }
+        ?>
+<include file="public/header"/>
+<!--头部-->
+
+<div class="clearfix" style="height: 1.9rem;"></div>
+
+<div class="convertibility_setting">
+	<a href="{:U('Wap/Members/auth_c1')}"><div class="list">
+		<span class="lab">
+			<li>
+				<span>C1认证</span>
+			</li>
+		</span>
+		<span class="icon" ></span>
+		<span class="name"><span class="tip" id="c1-box" style="float: right; text-align: right; color:#000; margin-right: .5rem;"></span></span>
+	</div></a>
+	<a href="{:U('Wap/Members/auth_c2')}"><div class="list">
+		<span class="lab">
+			<li>
+				<span>C2认证</span>
+
+			</li>
+		</span>
+		<span class="icon"></span>
+		<span class="name"><span class="tip" id="c2-box" style="float: right; text-align: right; color:#000; margin-right: .5rem;"></span></span>
+	</div></a>
+</div>
+
+<form action="" id="edit_form">
+<div class="convertibility_setting">
+	<div class="list">
+		<span class="lab">
+			<li class="but-weixin" style="margin-bottom: .5rem;">
+				<span>微信</span>
+			</li>
+		</span>
+		<span class="name"><input type="text" placeholder="" name="weixin_account" id="weixin_account" value="" /></span>
+	</div>
+</br>
+	<div class="list">
+		<span class="lab">
+			<li class="but-ali" >支付宝
+			</li>
+		</span>
+		<span class="name"><input type="text" placeholder="" name="alipay_account" id="alipay_account" value="" /></span>
+	</div>
+
+	<a href="{:U('Wap/Members/BankCard')}"><div class="list">
+		<span class="lab">银行卡</span>
+		<span class="icon"></span>
+		<span class="name"><span class="tip" id="bankcard-box" style="float: right; text-align: right; color:#000; margin-right: .5rem;"></span></span>
+	</div></a>
+	<a href="{:U('Wap/Members/other_payment')}"><div class="list">
+		<span class="lab">其他支付方式</span>
+		<span class="icon"></span>
+		<span class="name"></span>
+	</div></a>
+</div>
+
+<div class="ht_but" id="btn_submit">确认修改</div>
+<!--<a href="{:U('Api/Login/loginout')}"><div class="ht_but" id="btn_submit" >退出登录</div></a>-->
+</form>
+
+<include file="public/nav"/>
+<include file="public/footer"/>
+<script language="javascript" type="text/javascript">
+	$(function(){
+		//修改信息
+		$('#btn_submit').click(function(){
+			if($('input[name="weixin_account"]').val() == '' &&  $('input[name="alipay_account"]').val() == ''){
+				alertMsg('请填写微信或者支付宝账号');
+				return false;
+			}
+			AjaxPost('{:U("Api/Members/editMemberDep")}','edit_form','#btn_submit',function(data){
+				if(data.returnCode == 1){
+					alertMsg(data.returnMsg, function(){
+						location.href = "{:U('Wap/Members/memberInfo')}";
+					});
+				} else {
+					alertMsg(data.returnMsg);
+				}
+			});
+		});
+
+		PostApi("{:U('Api/Members/memberInfo')}", {}, function(data){
+			if(data.returnCode){
+				$('#nickname').html(data.result.nickname);
+				$('input[name="nickname"]').val(data.result.nickname);
+				$('#mobile').html(data.result.phone);
+				$('#vip_level').html(data.result.vip_level);
+				$('#member_tag').html(data.result.member_tag);
+				$('textarea[name="member_tag"]').html(data.result.member_tag);
+				$('#alipay_account').html(data.result.alipay_account);
+				$('input[name="alipay_account"]').val(data.result.alipay_account);
+				$('#weixin_account').html(data.result.weixin_account);
+				if(data.result.card_name == ''){
+					$('#bankcard-box').html('未添加');
+				}else{
+					$('#bankcard-box').html(data.result.card_name);
+				}
+
+				$('input[name="weixin_account"]').val(data.result.weixin_account);
+				$('.spinner').remove();
+			}
+		});
+		PostApi("{:U('Api/Members/query_auth')}", {type:1}, function(data){
+			if(data.returnCode > 0){
+				if(data.result.status == 0){
+					$('#c1-box').html('认证中');
+				} else if(data.result.status == 1){
+					$('#c1-box').html('已认证');
+				}
+			} else {
+				$('#c1-box').html('未认证');
+			}
+			$('.spinner').remove();
+		});
+
+		PostApi("{:U('Api/Members/query_auth')}", {type:2}, function(data){
+			if(data.returnCode > 0){
+				if(data.result.status == 0){
+					$('#c2-box').html('认证中');
+				} else if(data.result.status == 1){
+					$('#c2-box').html('已认证');
+				}
+			} else {
+				$('#c2-box').html('未认证');
+			}
+			$('.spinner').remove();
+		});
+
+	});
+</script>
+</body>
+</html>

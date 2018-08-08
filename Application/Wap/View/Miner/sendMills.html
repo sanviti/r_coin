@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale-1.0,user-scalable=no"/>
+    <title></title>
+</head>
+<style>
+    #xxk>.isShow{
+        width: 100%;
+        height: 200px;
+        /* background: pink; */
+    }
+    .titles{
+        width: 92%;
+        height: 38px;
+        margin-top: 20px;
+        float: left;
+        border-bottom: 1px solid #c1c1c1;
+        margin-top:10px;
+        margin-left: 5px;
+    }
+    .titles span{
+        font-size: 12px;
+        display: block;
+        float: left;
+        width: 32%;
+        height:38px;
+        text-align: center;
+        line-height: 12px;
+    }
+    .hide{ display:none !important; }
+    .show{ display:block !important; }
+</style>
+<body class="b_eb">
+<?php
+            $agent = $_SERVER['HTTP_USER_AGENT'];
+            if(strpos($agent,"Html5Plus") === false){
+        ?>
+<include file="public/top"/>
+<?php
+           }else{
+        ?>
+<style type="text/css">.c_content{margin-top: 0}</style>
+<?php
+            }
+        ?>
+<include file="public/header"/>
+<!--头部-->
+<div class="header">
+    <span class="return"></span>
+    <span class="text">转赠矿机票</span>
+</div>
+<div class="clearfix" style="height: 1.9rem;"></div>
+
+<div class="clearfix" style="height: 1.9rem;"></div>
+
+<div class="details_title1" style="border-radius: 5px 5px 0 0;">我的矿机票：<input type="text"  name="mills" id="mills" value="" /></div>
+
+
+<div class="details_reward">
+    <div class="title">内部奖励</div>
+    <div class="clearfix">
+        <div class="list">已释放：<i class="f_gre"><input type="text"  name="award" id="award" value="" /></i></div>
+        <div class="list">冻结：<i class="f_blue"><input type="text"  name="mills_lock" id="mills_lock" value="" /></i></div>
+    </div>
+</div>
+
+<form action="" method="post" name="send_form" id="send_form">
+    <div class="order_center_time clearfix">
+        <input class="fl" type="text" placeholder="对方手机号" name="moblie" id="moblie" value="" />
+        <input class="fr" type="text" placeholder="对方用户名" name="username" id="username" value="" />
+
+        <input class="fl" type="text" placeholder="转赠份数" name="send_num" id="send_num" value="" />
+        <input class="fr" type="text" placeholder="支付密码" name="pay_pwd" id="pay_pwd" value="" />
+        <span class="query"  id="btn_submit">确认转赠</span>
+    </div>
+</form>
+
+<div class="details_box" style="min-height: 17.5rem;">
+    <div class="detailed">
+        <span class="fl">转赠明细</span>
+        <div id="xxk" >
+            <a class="fr one show" href="#" data-type="1" onclick="tab('tab1')">转入记录</a>
+            <a class="fr two" href="#" data-type="2" onclick="tab('tab2')">转出记录</a>
+
+            <div id="tab1"style="display: none;">
+            <div class="isShow" >
+                <div class="titles">
+                    <span>转出用户名</span>
+                    <span>份额</span>
+                    <span>交易时间</span>
+                </div>
+                    <div class="records">
+                        <ul></ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab2">
+                 <div class="isShow">
+                <div class="titles">
+                    <span>转入用户名</span>
+                    <span>份额</span>
+                    <span>交易时间</span>
+                </div>
+                    <div class="outRecord">
+                        <ul></ul>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<include file="public/nav"/>
+<include file="public/footer"/>
+<script language="javascript" type="text/javascript">
+    function tab(pid){
+        var tabs=["tab1","tab2"];
+        for(var i=0;i<2;i++){
+            if(tabs[i]==pid){
+                document.getElementById(tabs[i]).style.display="block";
+            }else{
+                document.getElementById(tabs[i]).style.display="none";
+            }
+        }
+    }
+
+    $(function(){
+        //明细
+        var pageStart = 1;
+        // dropload
+        $('.dropload-box').dropload({
+            scrollArea : window,
+            domDown : {
+                domClass   : 'dropload-down',
+                domRefresh : '<div class="dropload-refresh">↑上拉加载更多</div>',
+                domLoad    : '<div class="dropload-load"><span class="loading"></span></div>',
+                domNoData  : '<div class="dropload-noData">没有更多数据</div>'
+            },
+            loadDownFn : function(me){
+                PostApi("{:U('Api/Minner/millsSendList')}", {page:pageStart}, function(data){
+                    if(data.returnCode == 1) {
+                        if(data.result.award > 0){
+                            $('input[name="award"]').val(data.result.award);
+                        }else{
+                            $('input[name="award"]').val('0');
+                        }
+
+                        var html = '';
+                        var showData = data.result.inRecord;
+                        if($('input[name="record_type"]').val()==2){
+                            var showData = data.result.outRecord;
+                        }
+                        $.each(data.result.inRecord,function(idx,record){
+                            html += '<div class="list">';
+                            html += '<span class="name"><div class="item">'+ record.username +'</div></span>';
+                            html += '<span class="number"><div class="item">'+ record.num +'</div></span>';
+                            html += '<span class="time"> <div class="item">'+ record.ctime +'</div></span>';
+                            html += '</div>';
+                        });
+                        //pageStart = data.result.page;
+                        $('.records ul').append(html);
+
+                        $.each(data.result.outRecord,function(idx,outrecord){
+                            html += '<div class="list">';
+                            html += '<span class="name"><div class="item">'+ outrecord.username +'</div></span>';
+                            html += '<span class="number"><div class="item">'+ outrecord.num +'</div></span>';
+                            html += '<span class="time"> <div class="item">'+ outrecord.ctime +'</div></span>';
+                            html += '</div>';
+                        });
+                        //pageStart = data.result.page;
+                        $('.outRecord ul').append(html);
+
+                    } else {
+                        // 无数据
+                        me.noData();
+                        // 锁定
+                        me.lock();
+                    }
+                    // me.resetload();
+                });
+            }
+        });
+        //用户信息
+        PostApi("{:U('Api/Members/memberInfo')}", {}, function(data){
+            if(data.returnCode){
+                $('input[name="max_num"]').val(data.result.ore);
+                $('input[name="mills"]').val(data.result.mills);
+                $('input[name="mills_lock"]').val(data.result.mills_lock);
+                $('.spinner').remove();
+            }
+        });
+
+        //兑换矿机票
+        $('#btn_submit').click(function(){
+            AjaxPost('{:U("Api/Minner/sendMills")}','send_form','#btn_submit',function(data){
+                if(data.returnCode == 1){
+                    alertMsg(data.returnMsg, function(){
+                        //location.href = "{:U('Wap/Members/exchange_center')}";
+                    });
+                } else {
+                    alertMsg(data.returnMsg);
+                    //location.href = "{:U('Wap/Members/exchange_center')}";
+                }
+            });
+        });
+
+    });
+</script>
+</body>
+</html>
+

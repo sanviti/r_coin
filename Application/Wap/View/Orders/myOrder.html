@@ -1,0 +1,177 @@
+<include file="public/header"/>
+<body class="b_eb">
+<!--头部-->
+<div class="header">
+	<span class="return" onClick="goBack()"></span>
+	<span class="text">订单中心</span>
+</div>
+<div class="clearfix" style="height: 1.9rem;"></div>
+
+<div class="order_center_title nav-tabs">
+	<span data-status="ing" class="on">进行中</span>
+	<span data-status="end" >已完成</span>
+</div>
+
+<div class="order_center_time clearfix">
+	<input class="fl" type="text" placeholder="起始时间" name="begin"  id="begin"   data-options="{'type':'YYYY-MM-DD','beginYear':2010,'endYear':2088}"   />
+	<input class="fr" type="text" placeholder="结束时间" name="end"  id="end"        data-options="{'type':'YYYY-MM-DD','beginYear':2010,'endYear':2088}" />
+	<div class="clearfix"></div>
+	<select class="fl" name="stype" id="stype">
+		<option   disabled selected style='display:none;'>订单类型</option>
+		<option value="1">买入</option>
+		<option value="2">卖出</option>
+	</select>
+	<input name="status" type="hidden" id="status" value="ing">
+	<span class="query" id="btn_search">查询</span>
+</div>
+
+<div class="order_center_box">
+
+</div>
+<div class=" dropload-box">
+
+</div>
+
+<div class="clearfix" style="height: 2.4rem;"></div>
+
+<include file="public/nav"/>
+<link href="__PUBLIC__/Wap/js/LCalendar/LCalendar.css" rel="stylesheet">
+<script src="__PUBLIC__/Wap/js/LCalendar/LCalendar.js"></script>
+<link href="__PUBLIC__/Wap/js/dropload/dropload.css" rel="stylesheet">
+<script src="__PUBLIC__/Wap/js/dropload/dropload.min.js"></script>
+
+<script language="javascript" type="text/javascript">
+	var maxDate = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate()
+	var calendar = new LCalendar();
+	calendar.init({
+		'trigger': '#begin', //标签id
+		'type': 'date', //date 调出日期选择 datetime 调出日期时间选择 time 调出时间选择 ym 调出年月选择,
+		'minDate': (new Date().getFullYear()-3) + '-' + 1 + '-' + 1, //最小日期
+		'maxDate': maxDate //最大日期
+	});
+	var calendar = new LCalendar();
+	calendar.init({
+		'trigger': '#end', //标签id
+		'type': 'date', //date 调出日期选择 datetime 调出日期时间选择 time 调出时间选择 ym 调出年月选择,
+		'minDate': (new Date().getFullYear()-3) + '-' + 1 + '-' + 1, //最小日期
+		'maxDate': maxDate //最大日期
+	});
+
+
+	var no = 1;
+	var pageStart = 1;
+	var dropload; //下拉加载对象
+	$(function(){
+		pageInit();
+	});
+
+	function pageInit(){
+		$('#status').val('ing');
+		//交易数据
+		bindSerach();
+		BindEvent();
+		bindDropload();
+	}
+	//搜索
+	function bindSerach(){
+		$('#btn_search').click(function(){
+			$('.order_center_box').html('');
+			no = 1;
+			pageStart = 1;
+			dropload.noData(false);
+			dropload.unlock ();
+			loadDownFn(dropload);
+		});
+	}
+
+	function BindEvent(){
+		$('.nav-tabs span').click(function(){
+			if($(this).hasClass('on')){
+				return false;
+			}
+			$('.nav-tabs span').removeClass('on');
+			$(this).addClass('on');
+			$('#status').val($(this).attr('data-status'));
+			$('#begin').val('');
+			$('#end').val('');
+			$("#stype option:first").prop("selected","selected");
+			$('.order_center_box').html('');
+			no = 1;
+			pageStart = 1;
+			dropload.noData(false);
+			dropload.unlock ();
+			loadDownFn(dropload);
+		});
+	}
+
+
+	function bindDropload(){
+		// dropload
+		dropload = $('.dropload-box').dropload({
+			scrollArea : window,
+			domDown : {
+				domClass   : 'dropload-down',
+				domRefresh : '<div class="dropload-refresh">↑上拉加载更多</div>',
+				domLoad    : '<div class="dropload-load"><span class="loading"></span></div>',
+				domNoData  : '<div class="dropload-noData">没有更多数据</div>'
+			},
+			loadDownFn : loadDownFn
+		});
+	}
+
+
+
+
+	function loadDownFn(me){
+		PostApi("{:U('Api/Orders/orders')}",
+				{
+					page:pageStart,
+					stype:$('#stype').val(),
+					begin:$('#begin').val(),
+					end:$('#end').val(),
+					status:$('#status').val()
+				},function(data){
+					if(data.returnCode == 1) {
+						var html = '';
+						$.each(data.result.list,function(idx,order){
+
+							var link_name = order.type == 1 ? 'buy_order' : 'sell_order';
+							if(order.type == 2){
+								classname = ' "type type2" ';
+								tname = '卖出';
+							}else{
+								var classname = ' "type type1" ';
+								var tname = '买入';
+							}
+							html += '<div class="list">';
+							html += '<div class=' + classname + '><span>'+tname+'</span></div>';
+							html += '<div class="text">委托价格：' + order.price + '<br/>委托数量：'+ order.opc +'<br/>委托时间：'+ order.create_time +'<br/>订单状态：' + order.lang_status +'</div>' ;
+
+							if(order.status >= 1 && order.status < 5){
+								html += '<div class="but"><span><a href="javascript:cancel_order('+ order.type+',\''+order.order_sn+'\');" style="color: white;">撤销</a></span></div>';
+							}
+							html += '<div class="but but1"><span><a style="color: white;" href="/index.php/Wap/Orders/' + link_name + '/id/' + order.id + '">查看</a></span></div>';
+							html += '</div>';
+						});
+						pageStart = data.result.page;
+						$('.order_center_box').append(html);
+						me.noData(false);
+					} else {
+						// 无数据
+						me.noData();
+						// 锁定
+						me.lock();
+					}
+					me.resetload();
+				});
+	}
+
+
+
+
+
+</script>
+
+
+</body>
+</html>

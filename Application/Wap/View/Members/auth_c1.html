@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale-1.0,user-scalable=no"/>
+		<title></title>
+	</head>
+
+	<body style="background-color: #ffffff;">
+	<?php
+            $agent = $_SERVER['HTTP_USER_AGENT'];
+            if(strpos($agent,"Html5Plus") === false){
+        ?>
+	<include file="public/top"/>
+	<?php
+           }else{
+        ?>
+	<style type="text/css">.c_content{margin-top: 0}</style>
+	<?php
+            }
+        ?>
+	<include file="public/header"/>
+		<!--头部-->
+
+		<div class="clearfix" style="height: 1.9rem;"></div>
+
+	<div class="c_content mt22" style="display:none;" id="form">
+		<div class="form_box">
+		<form action="" method="post" name="c1_form" id="c1_form">
+			<div class="list">
+				<div class="name">真实姓名：</div>
+				<input type="text" placeholder="请输入真实姓名" name="rname" value="" />
+			</div>
+			<div class="list">
+				<div class="name">身份证号码：</div>
+				<input type="text" placeholder="请输入18位号码" name="idcard" value="" />
+			</div>
+			<div class="ht_but" id="btn_submit">确认</div>
+		</form>
+		</div>
+	</div>
+	<div class="c_content mt22" style="display:none;" id="auth-tip">
+		<h4 class="auth_title" style="text-align: center;"></h4>
+	</div>
+		<include file="public/nav"/>
+<include file="public/footer"/>
+<script language="javascript" type="text/javascript">
+$(function(){
+	PostApi("{:U('Api/Members/query_auth')}", {type:1}, function(data){
+		if(data.returnCode == 1){
+			if(data.result.status == 0){
+				$('.auth_title').html('您的认证信息已提交，请等待审核');
+				$('#auth-tip').show();
+			} else if(data.result.status == 1){
+				$('.auth_title').html('恭喜，您的认证信息已通过审核');
+				$('#auth-tip').show();
+			} else {
+				$('#form').show();
+			}
+		} else {
+			$('#form').show();
+		}
+		$('.spinner').remove();
+	});
+	$('#btn_submit').click(function(){
+		if($('input[name="rname"]').val() == ''){
+			alertMsg('请填写姓名');
+			return false;
+		}
+		if($('input[name="idcard"]').val() == ''){
+			alertMsg('请填写身份证号码');
+			return false;
+		}
+		AjaxPost('{:U("Api/Members/auth_c1")}','c1_form','#btn_submit',function(data){
+				
+			if(data.returnCode == 1){
+				alertMsg(data.returnMsg, function(){
+					location.href = "{:U('Wap/Members/memberInfo')}";
+				});
+			} else {
+				alertMsg(data.returnMsg);
+			}
+		});
+	});
+});
+</script>
+	</body>
+</html>
+
